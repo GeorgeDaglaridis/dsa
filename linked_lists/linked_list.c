@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-int init(char *data);
-int add_in_the_beginning(char *data);
+int init(int data);
+int add_in_the_beginning(int data);
 void traverse(void);
 
 typedef struct node {
-    char data[40];
+    int data;
     struct node *next;
 
 } node_s;
@@ -19,24 +19,34 @@ int main(void) {
     // char arr[40] = "George";
     // printf("sizeof(arr) = %ld\n", sizeof(arr));
 
-    int (*func_ptr)(char *) = add_in_the_beginning;
+    int (*func_ptr)(int) = add_in_the_beginning;
 
-    init("George");
+    init(100);
 
-    func_ptr("Panos");
-    func_ptr("Stella");
+    func_ptr(101);
+    func_ptr(102);
+    func_ptr(103);
 
     traverse();
 
     return 0;
 }
 
-int init(char *data) {
+int init(int data) {
     if(__head) {
         printf("Linked list already initialized!\n");
         return -1;
     }
 
+    // sizeof(node_s) = 48 in case struct has char data[40]
+    
+    /* 
+     * sizeof(node_s) = 16 in case struct has int data
+     * struct node* is 8 bytes (64-bit machine) and has to start from a multiple of 8 
+     * due to alignement. So it has to start from 8th byte.
+     * Hence, 4 bytes for int: 0-1-2-3 + 4 bytes for padding: 4-5-6-7 since struct node* has to start 
+     * from a multiple of 8 + 8 bytes for struct node* itself
+     */
     printf("sizeof(node_s) = %ld\n", sizeof(node_s));
 
     __head = (node_s *) malloc(sizeof(node_s));
@@ -60,9 +70,10 @@ int init(char *data) {
     // printf("\"George\"[6] = %c\n", "George"[6]);
 
     __head->next = NULL;
-    memcpy(__head->data, data, strlen(data));
+    __head->data = data;
+    //memcpy(__head->data, data, strlen(data));
     
-    printf("__head->data = %s\n", __head->data);
+    printf("__head->data = %d\n", __head->data);
     printf("address of __head = %p\n", &__head);
     printf("pointer __head points to = %p\n", __head);
     printf("address of __head->data = %p\n", &__head->data);
@@ -72,13 +83,13 @@ int init(char *data) {
     return 0;
 }
 
-int add_in_the_beginning(char *data) {
+int add_in_the_beginning(int data) {
     if(!data) {
         printf("Invalid data!\n");
         return -1;
     }
 
-    printf("\n\n");
+    printf("\n");
 
     node_s *n = (node_s *) malloc(sizeof(node_s));
     if(!n) {
@@ -95,8 +106,9 @@ int add_in_the_beginning(char *data) {
     n->next = __head;
     printf("address n->next points to: %p\n", n->next);
 
-    memcpy(n->data, data, strlen(data));
-    printf("n->data = %s\n", n->data);
+    n->data = data;
+    //memcpy(n->data, data, strlen(data));
+    printf("n->data = %d\n", n->data);
 
     __head = n;
     printf("address new __head points to: %p\n", __head);
@@ -105,14 +117,14 @@ int add_in_the_beginning(char *data) {
 }
 
 void traverse(void) {
-    printf("\n\n");
+    printf("\n");
 
     int i = 0;
     for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next) {
         // According to the current strategy we have followed
         // for adding new nodes, the last added node is printed
         // first
-        printf("Node[%d]: %s\n", i, cursor->data);
+        printf("Node[%d]: %d\n", i, cursor->data);
         i++;
     }
 }
