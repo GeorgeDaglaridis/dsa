@@ -8,6 +8,7 @@ int add_at_the_end(int data);
 void traverse(void);
 int exists(int data);
 int delete(int data);
+int delete_piyush(int data);
 
 typedef struct node {
     int data;
@@ -236,6 +237,27 @@ int delete(int data) {
             // Save the cursor for every missed data.
             cursor_prev = cursor;
         }
+    }
+
+    return 0;
+}
+
+// Delete function according to how piyush implemented it.
+// Have not checked it!!!
+// I am not sure it takes into consideration the deletion of the 
+// very first node of the linked list, nor that it is actuall needed
+// or have to be deleted.
+int delete_piyush(int data) {
+    for(node_s *p = NULL, *c = __head;
+                c != NULL;
+                p = c, c = c->next_node) {
+
+        if(c->data == data) {
+            p->next_node = c->next_node;
+            free(c);
+            printf("deleted: %d\n", data);
+            return 1;
+        }    
     }
 
     return 0;
