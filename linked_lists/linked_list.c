@@ -19,10 +19,12 @@ int main(void) {
     // char arr[40] = "George";
     // printf("sizeof(arr) = %ld\n", sizeof(arr));
 
+    int (*func_ptr)(char *) = add_in_the_beginning;
+
     init("George");
 
-    add_in_the_beginning("Panos");
-    add_in_the_beginning("Stella");
+    func_ptr("Panos");
+    func_ptr("Stella");
 
     traverse();
 
