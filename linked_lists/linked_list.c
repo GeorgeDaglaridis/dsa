@@ -6,6 +6,7 @@ int init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 void traverse(void);
+int exists(int data);
 
 typedef struct node {
     int data;
@@ -29,7 +30,12 @@ int main(void) {
     func_ptr(102);
     func_ptr(103);
 
-    traverse();
+    printf("\nDoes 101 exist ? : %d\n", exists(101));
+    printf("Does 102 exist ? : %d\n", exists(102));
+    printf("Does 104 exist ? : %d\n", exists(104));
+    printf("Does 105 exist ? : %d\n", exists(105));
+
+    //traverse();
 
     return 0;
 }
@@ -145,14 +151,14 @@ int add_at_the_end(int data) {
     // with the newlly created node.
     node_s *cursor;
     for(cursor = __head; cursor->next != NULL; cursor = cursor->next) {
-        printf("address cursor points to: %p\n", cursor);
-        printf("address cursor->next points to: %p\n", cursor->next);
+        // printf("address cursor points to: %p\n", cursor);
+        // printf("address cursor->next points to: %p\n", cursor->next);
 
         /* Nothing to do, just heading to the end of the linke list */
     }
-    printf("out of for loop, address cursor points to: %p\n", cursor);
-    printf("out of for loop, address cursor->next points to: %p\n", cursor->next);
-    printf("out of for loop, address __head->next points to: %p\n", __head->next);
+    // printf("out of for loop, address cursor points to: %p\n", cursor);
+    // printf("out of for loop, address cursor->next points to: %p\n", cursor->next);
+    // printf("out of for loop, address __head->next points to: %p\n", __head->next);
 
     cursor->next = n;
 
@@ -170,4 +176,15 @@ void traverse(void) {
         printf("Node[%d]: %d\n", i, cursor->data);
         i++;
     }
+}
+
+int exists(int data) {
+    // 1: true, 0: false
+    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next) {
+        if(cursor->data == data) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
