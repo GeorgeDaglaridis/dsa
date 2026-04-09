@@ -212,7 +212,7 @@ int exists(int data) {
 int delete(int data) {
     printf("\n");
 
-    node_s *cursor_prev = NULL;
+    node_s *prev_cursor = NULL;
 
     for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         if(cursor->data == data) {
@@ -226,7 +226,7 @@ int delete(int data) {
             } else { // Takes into consideration the deletion of the very last node as well
                 // Link the previous node with the next_node node
                 // from the currently deleted one
-                cursor_prev->next_node = cursor->next_node;
+                prev_cursor->next_node = cursor->next_node;
                 cursor->next_node = NULL;
             }
             printf("%s containing %d at address %p was just deleted\n", msg, cursor->data, cursor);
@@ -235,7 +235,7 @@ int delete(int data) {
 
         } else {
             // Save the cursor for every missed data.
-            cursor_prev = cursor;
+            prev_cursor = cursor;
         }
     }
 
