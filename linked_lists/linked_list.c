@@ -7,10 +7,11 @@ int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 void traverse(void);
 int exists(int data);
+int delete(int data);
 
 typedef struct node {
     int data;
-    struct node *next;
+    struct node *next_node;
 
 } node_s;
 
@@ -29,13 +30,31 @@ int main(void) {
     func_ptr(101);
     func_ptr(102);
     func_ptr(103);
+    traverse();
 
-    printf("\nDoes 101 exist ? : %d\n", exists(101));
+    printf("\nDoes 100 exist ? : %d\n", exists(100));
+    printf("Does 101 exist ? : %d\n", exists(101));
     printf("Does 102 exist ? : %d\n", exists(102));
+    printf("Does 103 exist ? : %d\n", exists(103));
     printf("Does 104 exist ? : %d\n", exists(104));
     printf("Does 105 exist ? : %d\n", exists(105));
 
-    //traverse();
+    delete(100);
+    printf("\nDoes 100 exist ? : %d\n", exists(100));
+    
+    /*
+    delete(101);
+    printf("Does 101 exist ? : %d\n", exists(101));
+    delete(102);
+    printf("Does 102 exist ? : %d\n", exists(102));
+    delete(100);
+    printf("Does 100 exist ? : %d\n", exists(100));
+    */
+
+    //delete(103);
+    //printf("\nDoes 103 exist ? : %d\n", exists(103));
+
+    traverse();
 
     return 0;
 }
@@ -77,7 +96,7 @@ int init(int data) {
     // printf("\"George\"[5] = %c\n", "George"[5]);
     // printf("\"George\"[6] = %c\n", "George"[6]);
 
-    __head->next = NULL;
+    __head->next_node = NULL;
     __head->data = data;
     //memcpy(__head->data, data, strlen(data));
     
@@ -111,8 +130,8 @@ int add_in_the_beginning(int data) {
     // Link the new node with the previous one.
     // Practically put the new node before the one you
     // created before.
-    n->next = __head;
-    printf("address n->next points to: %p\n", n->next);
+    n->next_node = __head;
+    printf("address n->next_node points to: %p\n", n->next_node);
 
     n->data = data;
     //memcpy(n->data, data, strlen(data));
@@ -141,26 +160,26 @@ int add_at_the_end(int data) {
     printf("address new node n points to: %p\n", n);
     printf("address of n->data: %p\n", &n->data);
 
-    n->next = NULL;
+    n->next_node = NULL;
     n->data = data;
     //memcpy(n->data, data, strlen(data));
     printf("n->data = %d\n", n->data);
 
     // Link the new node with the previous one.
-    // Search untill node->next points to NULL and only then connect it
+    // Search untill node->next_node points to NULL and only then connect it
     // with the newlly created node.
     node_s *cursor;
-    for(cursor = __head; cursor->next != NULL; cursor = cursor->next) {
+    for(cursor = __head; cursor->next_node != NULL; cursor = cursor->next_node) {
         // printf("address cursor points to: %p\n", cursor);
-        // printf("address cursor->next points to: %p\n", cursor->next);
+        // printf("address cursor->next_node points to: %p\n", cursor->next_node);
 
         /* Nothing to do, just heading to the end of the linke list */
     }
     // printf("out of for loop, address cursor points to: %p\n", cursor);
-    // printf("out of for loop, address cursor->next points to: %p\n", cursor->next);
-    // printf("out of for loop, address __head->next points to: %p\n", __head->next);
+    // printf("out of for loop, address cursor->next_node points to: %p\n", cursor->next_node);
+    // printf("out of for loop, address __head->next_node points to: %p\n", __head->next_node);
 
-    cursor->next = n;
+    cursor->next_node = n;
 
     return 0;
 }
@@ -169,7 +188,7 @@ void traverse(void) {
     printf("\n");
 
     int i = 0;
-    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next) {
+    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         // According to the current strategy we have followed
         // for adding new nodes, the last added node is printed
         // first
@@ -180,9 +199,42 @@ void traverse(void) {
 
 int exists(int data) {
     // 1: true, 0: false
-    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next) {
+    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         if(cursor->data == data) {
             return 1;
+        }
+    }
+
+    return 0;
+}
+
+int delete(int data) {
+    printf("\n");
+
+    node_s *cursor_prev = NULL;
+
+    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
+        if(cursor->data == data) {
+
+            char * msg = "Node";
+            // Is it ok to delete the very fist node in a linked list ??
+            if(cursor == __head) {
+                __head = cursor->next_node;
+                cursor->next_node = NULL;
+                msg = "Init node";
+            } else { // Takes into consideration the deletion of the very last node as well
+                // Link the previous node with the next_node node
+                // from the currently deleted one
+                cursor_prev->next_node = cursor->next_node;
+                cursor->next_node = NULL;
+            }
+            printf("%s containing %d at address %p was just deleted\n", msg, cursor->data, cursor);
+            free(cursor);
+            return 1;
+
+        } else {
+            // Save the cursor for every missed data.
+            cursor_prev = cursor;
         }
     }
 
