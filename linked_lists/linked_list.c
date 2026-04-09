@@ -9,6 +9,7 @@ void traverse(void);
 int exists(int data);
 int delete(int data);
 int delete_piyush(int data);
+int insert(int key, int data);
 
 typedef struct node {
     int data;
@@ -40,8 +41,8 @@ int main(void) {
     printf("Does 104 exist ? : %d\n", exists(104));
     printf("Does 105 exist ? : %d\n", exists(105));
 
-    delete(100);
-    printf("\nDoes 100 exist ? : %d\n", exists(100));
+    //delete(100);
+    //printf("\nDoes 100 exist ? : %d\n", exists(100));
     
     /*
     delete(101);
@@ -54,6 +55,17 @@ int main(void) {
 
     //delete(103);
     //printf("\nDoes 103 exist ? : %d\n", exists(103));
+
+    insert(102, 50);
+    printf("Does 50 exist ? : %d\n", exists(50));
+    insert(103, 104);
+    printf("Does 104 exist ? : %d\n", exists(104));
+    insert(50, 51);
+    printf("Does 51 exist ? : %d\n", exists(51));
+
+    insert(106, 55);
+    printf("Does 55 exist ? : %d\n", exists(55));
+
 
     traverse();
 
@@ -259,6 +271,33 @@ int delete_piyush(int data) {
             return 1;
         }    
     }
+
+    return 0;
+}
+
+int insert(int key, int data) {
+    printf("\n");
+
+    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
+        if(cursor->data == key) {
+            node_s *n = (node_s *) malloc(sizeof(node_s));
+            if(!n) {
+                printf("New node memory allocation failed!\n");
+                return -1;
+            }
+
+            n->data = data;
+            n->next_node = cursor->next_node;
+            cursor->next_node = n;
+
+            printf("New node was inserted at address %p ", n);
+            printf("next to node with address %p\n", cursor);
+            printf("New node data: %d\n", n->data);
+
+            return 1;
+        }
+    }
+    printf("key %d was not found!\n", key);
 
     return 0;
 }
