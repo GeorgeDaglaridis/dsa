@@ -10,6 +10,7 @@ int exists(int data);
 int delete(int data);
 int delete_piyush(int data);
 int insert(int key, int data);
+int insert_piyush(int key, int data);
 
 typedef struct node {
     int data;
@@ -298,6 +299,39 @@ int insert(int key, int data) {
         }
     }
     printf("key %d was not found!\n", key);
+
+    return 0;
+}
+
+int insert_piyush(int key, int data) {
+    printf("\n");
+
+    node_s *k, *n;
+
+    for(k = __head; k != NULL; k = k->next_node) {
+        if(k->data = key) {
+            break;
+        }
+    }
+
+    if(!k) {
+        printf("Insertion failed: Key was not found!\n");
+        return -1;
+    }
+
+    n = (node_s *) malloc(sizeof(node_s));
+    if(!n) {
+        printf("Insertion failed: New node memory allocation failed!\n");
+        return -2;
+    }
+
+    n->data = data;
+    n->next_node = k->next_node;
+    k->next_node = n;
+
+    printf("New node was inserted at address %p ", n);
+    printf("next to node with address %p\n", k);
+    printf("New node data: %d\n", n->data);
 
     return 0;
 }
