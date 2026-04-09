@@ -4,6 +4,7 @@
 
 int init(int data);
 int add_in_the_beginning(int data);
+int add_at_the_end(int data);
 void traverse(void);
 
 typedef struct node {
@@ -19,7 +20,8 @@ int main(void) {
     // char arr[40] = "George";
     // printf("sizeof(arr) = %ld\n", sizeof(arr));
 
-    int (*func_ptr)(int) = add_in_the_beginning;
+    // int (*func_ptr)(int) = add_in_the_beginning;
+    int (*func_ptr)(int) = add_at_the_end;
 
     init(100);
 
@@ -113,6 +115,47 @@ int add_in_the_beginning(int data) {
     __head = n;
     printf("address new __head points to: %p\n", __head);
     
+    return 0;
+}
+
+int add_at_the_end(int data) {
+    if(!data) {
+        printf("Invalid data!\n");
+        return -1;
+    }
+
+    printf("\n");
+
+    node_s *n = (node_s *) malloc(sizeof(node_s));
+    if(!n) {
+        printf("New node memory allocation failed!\n");
+        return -2;
+    }
+
+    printf("address new node n points to: %p\n", n);
+    printf("address of n->data: %p\n", &n->data);
+
+    n->next = NULL;
+    n->data = data;
+    //memcpy(n->data, data, strlen(data));
+    printf("n->data = %d\n", n->data);
+
+    // Link the new node with the previous one.
+    // Search untill node->next points to NULL and only then connect it
+    // with the newlly created node.
+    node_s *cursor;
+    for(cursor = __head; cursor->next != NULL; cursor = cursor->next) {
+        printf("address cursor points to: %p\n", cursor);
+        printf("address cursor->next points to: %p\n", cursor->next);
+
+        /* Nothing to do, just heading to the end of the linke list */
+    }
+    printf("out of for loop, address cursor points to: %p\n", cursor);
+    printf("out of for loop, address cursor->next points to: %p\n", cursor->next);
+    printf("out of for loop, address __head->next points to: %p\n", __head->next);
+
+    cursor->next = n;
+
     return 0;
 }
 
