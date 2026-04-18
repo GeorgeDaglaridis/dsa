@@ -6,6 +6,16 @@
 #define INV_DATA  -2
 #define ALRD_INIT -3
 
+// Not needed in this code but I added it 
+// just for practicing it
+#define DEBUG 1
+
+#if DEBUG
+    #define DEBUG_PRINT(...) printf(__VA_ARGS__)
+#else
+    #define DEBUG_PRINT(...)
+#endif
+
 int init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
@@ -92,7 +102,7 @@ int init(int data) {
      * Hence, 4 bytes for int: 0-1-2-3 + 4 bytes for padding: 4-5-6-7 since struct node* has to start 
      * from a multiple of 8 + 8 bytes for struct node* itself
      */
-    printf("sizeof(node_s) = %ld\n", sizeof(node_s));
+    DEBUG_PRINT("sizeof(node_s) = %ld\n", sizeof(node_s));
 
     __head = (node_s *) malloc(sizeof(node_s));
     if(!__head) {
@@ -118,10 +128,10 @@ int init(int data) {
     __head->data = data;
     //memcpy(__head->data, data, strlen(data));
     
-    printf("__head->data = %d\n", __head->data);
-    printf("address of __head = %p\n", &__head);
-    printf("pointer __head points to = %p\n", __head);
-    printf("address of __head->data = %p\n", &__head->data);
+    DEBUG_PRINT("__head->data = %d\n", __head->data);
+    DEBUG_PRINT("address of __head = %p\n", &__head);
+    DEBUG_PRINT("pointer __head points to = %p\n", __head);
+    DEBUG_PRINT("address of __head->data = %p\n", &__head->data);
 
 
     //free(__head);
@@ -142,21 +152,21 @@ int add_in_the_beginning(int data) {
         return ERR_ALLOC;
     }
 
-    printf("address new node n points to: %p\n", n);
-    printf("address of n->data: %p\n", &n->data);
+    DEBUG_PRINT("address new node n points to: %p\n", n);
+    DEBUG_PRINT("address of n->data: %p\n", &n->data);
     
     // Link the new node with the previous one.
     // Practically put the new node before the one you
     // created before.
     n->next_node = __head;
-    printf("address n->next_node points to: %p\n", n->next_node);
+    DEBUG_PRINT("address n->next_node points to: %p\n", n->next_node);
 
     n->data = data;
     //memcpy(n->data, data, strlen(data));
-    printf("n->data = %d\n", n->data);
+    DEBUG_PRINT("n->data = %d\n", n->data);
 
     __head = n;
-    printf("address new __head points to: %p\n", __head);
+    DEBUG_PRINT("address new __head points to: %p\n", __head);
     
     return 0;
 }
@@ -167,7 +177,7 @@ int add_at_the_end(int data) {
         return INV_DATA;
     }
 
-    printf("\n");
+    DEBUG_PRINT("\n");
 
     node_s *n = (node_s *) malloc(sizeof(node_s));
     if(!n) {
@@ -175,13 +185,13 @@ int add_at_the_end(int data) {
         return ERR_ALLOC;
     }
 
-    printf("address new node n points to: %p\n", n);
-    printf("address of n->data: %p\n", &n->data);
+    DEBUG_PRINT("address new node n points to: %p\n", n);
+    DEBUG_PRINT("address of n->data: %p\n", &n->data);
 
     n->next_node = NULL;
     n->data = data;
     //memcpy(n->data, data, strlen(data));
-    printf("n->data = %d\n", n->data);
+    DEBUG_PRINT("n->data = %d\n", n->data);
 
     // Link the new node with the previous one.
     // Search untill node->next_node points to NULL and only then connect it
@@ -295,14 +305,14 @@ int insert(int key, int data) {
             n->next_node = cursor->next_node;
             cursor->next_node = n;
 
-            printf("New node was inserted at address %p ", n);
-            printf("next to node with address %p\n", cursor);
-            printf("New node data: %d\n", n->data);
+            DEBUG_PRINT("New node was inserted at address %p ", n);
+            DEBUG_PRINT("next to node with address %p\n", cursor);
+            DEBUG_PRINT("New node data: %d\n", n->data);
 
             return 1;
         }
     }
-    printf("key %d was not found!\n", key);
+    DEBUG_PRINT("key %d was not found!\n", key);
 
     return 0;
 }
@@ -333,9 +343,9 @@ int insert_piyush(int key, int data) {
     n->next_node = k->next_node;
     k->next_node = n;
 
-    printf("New node was inserted at address %p ", n);
-    printf("next to node with address %p\n", k);
-    printf("New node data: %d\n", n->data);
+    DEBUG_PRINT("New node was inserted at address %p ", n);
+    DEBUG_PRINT("next to node with address %p\n", k);
+    DEBUG_PRINT("New node data: %d\n", n->data);
 
     return 0;
 }
