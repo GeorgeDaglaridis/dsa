@@ -24,8 +24,8 @@ int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 int traverse(void);
 bool list_contains(int data);
-int delete(int data);
-int delete_piyush(int data);
+bool delete_node(int data);
+bool delete_node_piyush(int data);
 int insert(int key, int data);
 int insert_piyush(int key, int data);
 
@@ -59,19 +59,19 @@ int main(void) {
     printf("Does 104 exist ? : %d\n", list_contains(104));
     printf("Does 105 exist ? : %d\n", list_contains(105));
 
-    //delete(100);
+    //delete_node(100);
     //printf("\nDoes 100 exist ? : %d\n", list_contains(100));
     
     /*
-    delete(101);
+    delete_node(101);
     printf("Does 101 exist ? : %d\n", list_contains(101));
-    delete(102);
+    delete_node(102);
     printf("Does 102 exist ? : %d\n", list_contains(102));
-    delete(100);
+    delete_node(100);
     printf("Does 100 exist ? : %d\n", list_contains(100));
     */
 
-    //delete(103);
+    //delete_node(103);
     //printf("\nDoes 103 exist ? : %d\n", list_contains(103));
 
     insert(102, 50);
@@ -260,7 +260,7 @@ bool list_contains(int data) {
     return false;
 }
 
-int delete(int data) {
+bool delete_node(int data) {
     printf("\n");
 
     node_s *prev_cursor = NULL;
@@ -269,20 +269,26 @@ int delete(int data) {
         if(cursor->data == data) {
 
             char * msg = "Node";
-            // Is it ok to delete the very fist node in a linked list ??
+            // Is it ok to delete the very fist node in a linked list ?? Yes
             if(cursor == __head) {
                 __head = cursor->next_node;
-                cursor->next_node = NULL;
+
+                // Maybe it is more clear this way, but not needed since 
+                // you are going to free cursor
+                //cursor->next_node = NULL;
                 msg = "Init node";
             } else { // Takes into consideration the deletion of the very last node as well
                 // Link the previous node with the next_node node
                 // from the currently deleted one
                 prev_cursor->next_node = cursor->next_node;
-                cursor->next_node = NULL;
+
+                // Maybe it is more clear this way, but not needed since 
+                // you are going to free cursor
+                //cursor->next_node = NULL;
             }
             printf("%s containing %d at address %p was just deleted\n", msg, cursor->data, cursor);
             free(cursor);
-            return 1;
+            return true;
 
         } else {
             // Save the cursor for every missed data.
@@ -290,7 +296,7 @@ int delete(int data) {
         }
     }
 
-    return SUCCESS;
+    return false;
 }
 
 // Delete function according to how piyush implemented it.
@@ -298,7 +304,7 @@ int delete(int data) {
 // I am not sure it takes into consideration the deletion of the 
 // very first node of the linked list, nor that it is actuall needed
 // or have to be deleted.
-int delete_piyush(int data) {
+bool delete_node_piyush(int data) {
     for(node_s *p = NULL, *c = __head;
                 c != NULL;
                 p = c, c = c->next_node) {
@@ -307,11 +313,11 @@ int delete_piyush(int data) {
             p->next_node = c->next_node;
             free(c);
             printf("deleted: %d\n", data);
-            return 1;
+            return true;
         }    
     }
 
-    return SUCCESS;
+    return false;
 }
 
 int insert(int key, int data) {

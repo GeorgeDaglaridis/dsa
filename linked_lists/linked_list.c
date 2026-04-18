@@ -22,7 +22,7 @@ int list_init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 int traverse(void);
-int list_contains(int data);
+int exists(int data);
 int delete(int data);
 int delete_piyush(int data);
 int insert(int key, int data);
@@ -51,37 +51,37 @@ int main(void) {
     func_ptr(103);
     traverse();
 
-    printf("\nDoes 100 exist ? : %d\n", list_contains(100));
-    printf("Does 101 exist ? : %d\n", list_contains(101));
-    printf("Does 102 exist ? : %d\n", list_contains(102));
-    printf("Does 103 exist ? : %d\n", list_contains(103));
-    printf("Does 104 exist ? : %d\n", list_contains(104));
-    printf("Does 105 exist ? : %d\n", list_contains(105));
+    printf("\nDoes 100 exist ? : %d\n", exists(100));
+    printf("Does 101 exist ? : %d\n", exists(101));
+    printf("Does 102 exist ? : %d\n", exists(102));
+    printf("Does 103 exist ? : %d\n", exists(103));
+    printf("Does 104 exist ? : %d\n", exists(104));
+    printf("Does 105 exist ? : %d\n", exists(105));
 
     //delete(100);
-    //printf("\nDoes 100 exist ? : %d\n", list_contains(100));
+    //printf("\nDoes 100 exist ? : %d\n", exists(100));
     
     /*
     delete(101);
-    printf("Does 101 exist ? : %d\n", list_contains(101));
+    printf("Does 101 exist ? : %d\n", exists(101));
     delete(102);
-    printf("Does 102 exist ? : %d\n", list_contains(102));
+    printf("Does 102 exist ? : %d\n", exists(102));
     delete(100);
-    printf("Does 100 exist ? : %d\n", list_contains(100));
+    printf("Does 100 exist ? : %d\n", exists(100));
     */
 
     //delete(103);
-    //printf("\nDoes 103 exist ? : %d\n", list_contains(103));
+    //printf("\nDoes 103 exist ? : %d\n", exists(103));
 
     insert(102, 50);
-    printf("Does 50 exist ? : %d\n", list_contains(50));
+    printf("Does 50 exist ? : %d\n", exists(50));
     insert(103, 104);
-    printf("Does 104 exist ? : %d\n", list_contains(104));
+    printf("Does 104 exist ? : %d\n", exists(104));
     insert(50, 51);
-    printf("Does 51 exist ? : %d\n", list_contains(51));
+    printf("Does 51 exist ? : %d\n", exists(51));
 
     insert(106, 55);
-    printf("Does 55 exist ? : %d\n", list_contains(55));
+    printf("Does 55 exist ? : %d\n", exists(55));
 
 
     traverse();
@@ -249,7 +249,7 @@ int traverse(void) {
     return SUCCESS;
 }
 
-int list_contains(int data) {
+int exists(int data) {
     // 1: true, 0: false
     for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         if(cursor->data == data) {
