@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ERR_ALLOC -1
+#define INV_DATA  -2
+#define ALRD_INIT -3
+
 int init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
@@ -76,7 +80,7 @@ int main(void) {
 int init(int data) {
     if(__head) {
         printf("Linked list already initialized!\n");
-        return -1;
+        return ALRD_INIT;
     }
 
     // sizeof(node_s) = 48 in case struct has char data[40]
@@ -93,7 +97,7 @@ int init(int data) {
     __head = (node_s *) malloc(sizeof(node_s));
     if(!__head) {
         printf("Init memory allocation failed!\n");
-        return -2;
+        return ERR_ALLOC;
     }
 
     // printf("strlen(data) = %ld\n", strlen(data));
@@ -127,7 +131,7 @@ int init(int data) {
 int add_in_the_beginning(int data) {
     if(!data) {
         printf("Invalid data!\n");
-        return -1;
+        return INV_DATA;
     }
 
     printf("\n");
@@ -135,7 +139,7 @@ int add_in_the_beginning(int data) {
     node_s *n = (node_s *) malloc(sizeof(node_s));
     if(!n) {
         printf("New node memory allocation failed!\n");
-        return -2;
+        return ERR_ALLOC;
     }
 
     printf("address new node n points to: %p\n", n);
@@ -160,7 +164,7 @@ int add_in_the_beginning(int data) {
 int add_at_the_end(int data) {
     if(!data) {
         printf("Invalid data!\n");
-        return -1;
+        return INV_DATA;
     }
 
     printf("\n");
@@ -168,7 +172,7 @@ int add_at_the_end(int data) {
     node_s *n = (node_s *) malloc(sizeof(node_s));
     if(!n) {
         printf("New node memory allocation failed!\n");
-        return -2;
+        return ERR_ALLOC;
     }
 
     printf("address new node n points to: %p\n", n);
@@ -284,7 +288,7 @@ int insert(int key, int data) {
             node_s *n = (node_s *) malloc(sizeof(node_s));
             if(!n) {
                 printf("New node memory allocation failed!\n");
-                return -1;
+                return ERR_ALLOC;
             }
 
             n->data = data;
@@ -322,7 +326,7 @@ int insert_piyush(int key, int data) {
     n = (node_s *) malloc(sizeof(node_s));
     if(!n) {
         printf("Insertion failed: New node memory allocation failed!\n");
-        return -2;
+        return ERR_ALLOC;
     }
 
     n->data = data;
