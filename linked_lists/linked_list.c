@@ -21,7 +21,7 @@
 int list_init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
-void traverse(void);
+int traverse(void);
 int exists(int data);
 int delete(int data);
 int delete_piyush(int data);
@@ -228,17 +228,25 @@ int add_at_the_end(int data) {
     return SUCCESS;
 }
 
-void traverse(void) {
+int traverse(void) {
+    if(!__head) {
+        printf("List is empty!\n");
+        return EMPTY_LL;
+    }
+
     printf("\n");
 
     int i = 0;
-    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
-        // According to the current strategy we have followed
-        // for adding new nodes, the last added node is printed
-        // first
+    for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
+        // If you add nodes before the init node (func: add_in_the_beginning) 
+        // the last added node is printed first
+        // If you add nodes after the init node (func: add_at_the_end) - current strategy- 
+        // the last added node is printed last
         printf("Node[%d]: %d\n", i, cursor->data);
         i++;
     }
+
+    return SUCCESS;
 }
 
 int exists(int data) {
