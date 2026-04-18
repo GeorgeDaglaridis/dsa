@@ -251,13 +251,13 @@ int traverse(void) {
 
 int exists(int data) {
     // 1: true, 0: false
-    for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
+    for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         if(cursor->data == data) {
             return 1;
         }
     }
 
-    return SUCCESS;
+    return 0;
 }
 
 int delete(int data) {
