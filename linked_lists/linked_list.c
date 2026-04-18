@@ -5,6 +5,7 @@
 #define ERR_ALLOC -1
 #define INV_DATA  -2
 #define ALRD_INIT -3
+#define EMPTY_LL  -4
 
 // Not needed in this code but I added it 
 // just for practicing it
@@ -139,6 +140,13 @@ int init(int data) {
 }
 
 int add_in_the_beginning(int data) {
+    // Cannot add nodes if you have not initialized first!
+    if(!__head) {
+        printf("Linked list not initialized!\n");
+        return EMPTY_LL;
+    }
+
+    // 0 is not accepted !
     if(!data) {
         printf("Invalid data!\n");
         return INV_DATA;
@@ -172,6 +180,13 @@ int add_in_the_beginning(int data) {
 }
 
 int add_at_the_end(int data) {
+    // Cannot add nodes if you have not initialized first!
+    if(!__head) {
+        printf("Linked list not initialized!\n");
+        return EMPTY_LL;
+    }
+
+    // 0 is not accepted !
     if(!data) {
         printf("Invalid data!\n");
         return INV_DATA;
