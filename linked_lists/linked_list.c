@@ -18,7 +18,7 @@
     #define DEBUG_PRINT(...)
 #endif
 
-int init(int data);
+int list_init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 void traverse(void);
@@ -44,7 +44,7 @@ int main(void) {
     // int (*func_ptr)(int) = add_in_the_beginning;
     int (*func_ptr)(int) = add_at_the_end;
 
-    init(100);
+    list_init(100);
 
     func_ptr(101);
     func_ptr(102);
@@ -89,7 +89,7 @@ int main(void) {
     return SUCCESS;
 }
 
-int init(int data) {
+int list_init(int data) {
     if(__head) {
         printf("Linked list already initialized!\n");
         return ALRD_INIT;
