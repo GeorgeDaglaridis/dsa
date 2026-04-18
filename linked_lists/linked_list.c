@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define SUCCESS    0
 #define ERR_ALLOC -1
 #define INV_DATA  -2
 #define ALRD_INIT -3
@@ -85,7 +86,7 @@ int main(void) {
 
     traverse();
 
-    return 0;
+    return SUCCESS;
 }
 
 int init(int data) {
@@ -136,7 +137,7 @@ int init(int data) {
 
 
     //free(__head);
-    return 0;
+    return SUCCESS;
 }
 
 int add_in_the_beginning(int data) {
@@ -176,7 +177,7 @@ int add_in_the_beginning(int data) {
     __head = n;
     DEBUG_PRINT("address new __head points to: %p\n", __head);
     
-    return 0;
+    return SUCCESS;
 }
 
 int add_at_the_end(int data) {
@@ -224,7 +225,7 @@ int add_at_the_end(int data) {
 
     cursor->next_node = n;
 
-    return 0;
+    return SUCCESS;
 }
 
 void traverse(void) {
@@ -248,7 +249,7 @@ int exists(int data) {
         }
     }
 
-    return 0;
+    return SUCCESS;
 }
 
 int delete(int data) {
@@ -281,7 +282,7 @@ int delete(int data) {
         }
     }
 
-    return 0;
+    return SUCCESS;
 }
 
 // Delete function according to how piyush implemented it.
@@ -302,7 +303,7 @@ int delete_piyush(int data) {
         }    
     }
 
-    return 0;
+    return SUCCESS;
 }
 
 int insert(int key, int data) {
@@ -329,7 +330,7 @@ int insert(int key, int data) {
     }
     DEBUG_PRINT("key %d was not found!\n", key);
 
-    return 0;
+    return SUCCESS;
 }
 
 int insert_piyush(int key, int data) {
@@ -345,7 +346,7 @@ int insert_piyush(int key, int data) {
 
     if(!k) {
         printf("Insertion failed: Key was not found!\n");
-        return -1;
+        return -4;
     }
 
     n = (node_s *) malloc(sizeof(node_s));
@@ -362,5 +363,5 @@ int insert_piyush(int key, int data) {
     DEBUG_PRINT("next to node with address %p\n", k);
     DEBUG_PRINT("New node data: %d\n", n->data);
 
-    return 0;
+    return SUCCESS;
 }
