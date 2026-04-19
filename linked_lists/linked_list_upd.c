@@ -23,7 +23,7 @@
 int list_init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
-int traverse(void);
+void traverse_ll(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
@@ -51,7 +51,7 @@ int main(void) {
     func_ptr(101);
     func_ptr(102);
     func_ptr(103);
-    traverse();
+    traverse_ll();
 
     printf("\nDoes 100 exist ? : %d\n", list_contains(100));
     printf("Does 101 exist ? : %d\n", list_contains(101));
@@ -85,7 +85,7 @@ int main(void) {
     insert_node_after_key(106, 55);
     printf("Does 55 exist ? : %d\n", list_contains(55));
 
-    traverse();
+    traverse_ll();
 
     return SUCCESS;
 }
@@ -228,11 +228,14 @@ int add_at_the_end(int data) {
     return SUCCESS;
 }
 
-int traverse(void) {
-    if(!__head) {
-        printf("List is empty!\n");
-        return EMPTY_LL;
-    }
+void traverse_ll(void) {
+    // In this function, checking whether ll is empty is a design choice
+    // rather than a necessity.
+    // Many APIs simply do nothing for empty lists
+    // if(!__head) {
+    //     printf("List is empty!\n");
+    //     return EMPTY_LL;
+    // }
 
     printf("\n");
 
@@ -242,11 +245,8 @@ int traverse(void) {
         // the last added node is printed first
         // If you add nodes after the init node (func: add_at_the_end) - current strategy- 
         // the last added node is printed last
-        printf("Node[%d]: %d\n", i, cursor->data);
-        i++;
+        printf("Node[%d]: %d\n", i++, cursor->data);
     }
-
-    return SUCCESS;
 }
 
 bool list_contains(int data) {
