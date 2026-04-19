@@ -107,9 +107,13 @@ int list_init(int data) {
      * Hence, 4 bytes for int: 0-1-2-3 + 4 bytes for padding: 4-5-6-7 since struct node* has to start 
      * from a multiple of 8 + 8 bytes for struct node* itself
      */
-    DEBUG_PRINT("sizeof(node_s) = %ld\n", sizeof(node_s));
+    DEBUG_PRINT("sizeof(node_s)  = %ld\n", sizeof(node_s));
+    DEBUG_PRINT("sizeof(*__head) = %ld\n", sizeof(*__head));
+    DEBUG_PRINT("sizeof(__head)  = %ld\n", sizeof(__head));
+    
+    // sizeof(node_s) = 48 in case struct has char data[40]
 
-    __head = (node_s *) malloc(sizeof(node_s));
+    __head = malloc(sizeof(*__head));
     if(!__head) {
         printf("Init memory allocation failed!\n");
         return ERR_ALLOC;
@@ -157,7 +161,7 @@ int add_in_the_beginning(int data) {
 
     printf("\n");
 
-    node_s *n = (node_s *) malloc(sizeof(node_s));
+    node_s *n = malloc(sizeof(*n));
     if(!n) {
         printf("New node memory allocation failed!\n");
         return ERR_ALLOC;
@@ -197,7 +201,7 @@ int add_at_the_end(int data) {
 
     DEBUG_PRINT("\n");
 
-    node_s *n = (node_s *) malloc(sizeof(node_s));
+    node_s *n = malloc(sizeof(*n));
     if(!n) {
         printf("New node memory allocation failed!\n");
         return ERR_ALLOC;
@@ -360,7 +364,7 @@ int insert_node_after_key(int key, int data) {
 
     for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         if(cursor->data == key) {
-            node_s *n = (node_s *) malloc(sizeof(node_s));
+            node_s *n = malloc(sizeof(*n));
             if(!n) {
                 printf("New node memory allocation failed!\n");
                 return ERR_ALLOC;
@@ -400,7 +404,7 @@ int insert_node_piyush(int key, int data) {
         return KEY_NOT_FOUND;
     }
 
-    n = (node_s *) malloc(sizeof(node_s));
+    n = malloc(sizeof(*n));
     if(!n) {
         printf("Insertion failed: New node memory allocation failed!\n");
         return ERR_ALLOC;
