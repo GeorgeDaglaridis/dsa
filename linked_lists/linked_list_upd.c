@@ -24,7 +24,7 @@ int list_init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 void traverse_ll(void);
-int ll_lenght(void);
+size_t ll_lenght(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
@@ -251,7 +251,7 @@ void traverse_ll(void) {
     }
 }
 
-int ll_lenght(void) {
+size_t ll_lenght(void) {
     size_t i = 0;
     for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         i++;
