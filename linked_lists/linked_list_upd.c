@@ -28,7 +28,8 @@ int ll_lenght(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
-bool insert_node_after_key(int key, int data);
+bool delete_node_piyush_upd(int data);
+int insert_node_after_key(int key, int data);
 int insert_node_piyush(int key, int data);
 
 typedef struct node {
@@ -264,7 +265,6 @@ bool list_contains(int data) {
             return true;
         }
     }
-
     return false;
 }
 
@@ -310,8 +310,8 @@ bool delete_node(int data) {
 // Delete function according to how piyush implemented it.
 // Have not checked it!!!
 // I am not sure it takes into consideration the deletion of the 
-// very first node of the linked list, nor that it is actuall needed
-// or have to be deleted.
+// very first node of the linked list (I believe it does not), nor 
+// that it is actuall needed or have to be deleted.
 bool delete_node_piyush(int data) {
     for(node_s *p = NULL, *c = __head;
                 c != NULL;
@@ -328,7 +328,29 @@ bool delete_node_piyush(int data) {
     return false;
 }
 
-bool insert_node_after_key(int key, int data) {
+// Not tested but I believe this takes into
+// consideration the removal of __head
+bool delete_node_piyush_upd(int data) {
+    for(node_s *p = NULL, *c = __head;
+                c != NULL;
+                p = c, c = c->next_node) {
+
+        if(c->data == data) {
+            if(c == __head) {
+                __head = c->next_node;
+            }
+            else {
+                p->next_node = c->next_node;
+            }            
+            free(c);
+            printf("deleted: %d\n", data);
+            return true;
+        }    
+    }
+    return false;
+}
+
+int insert_node_after_key(int key, int data) {
     if(!__head) {
         printf("List is empty!\n");
         return EMPTY_LL;
@@ -352,14 +374,16 @@ bool insert_node_after_key(int key, int data) {
             DEBUG_PRINT("next to node with address %p\n", cursor);
             DEBUG_PRINT("New node data: %d\n", n->data);
 
-            return true;
+            return SUCCESS;
         }
     }
     DEBUG_PRINT("key %d was not found!\n", key);
 
-    return false;
+    return KEY_NOT_FOUND;
 }
 
+// I think I like the way this function is written
+// by piuysh more than mine.
 int insert_node_piyush(int key, int data) {
     printf("\n");
 
@@ -373,7 +397,7 @@ int insert_node_piyush(int key, int data) {
 
     if(!k) {
         printf("Insertion failed: Key was not found!\n");
-        return -4;
+        return KEY_NOT_FOUND;
     }
 
     n = (node_s *) malloc(sizeof(node_s));
