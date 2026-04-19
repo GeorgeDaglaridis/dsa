@@ -3,11 +3,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define SUCCESS    0
-#define ERR_ALLOC -1
-#define INV_DATA  -2
-#define ALRD_INIT -3
-#define EMPTY_LL  -4
+#define SUCCESS         0
+#define ERR_ALLOC      -1
+#define INV_DATA       -2
+#define ALRD_INIT      -3
+#define EMPTY_LL       -4
+#define KEY_NOT_FOUND  -5
 
 // Not needed in this code but I added it 
 // just for practicing it
@@ -26,8 +27,8 @@ int traverse(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
-int insert(int key, int data);
-int insert_piyush(int key, int data);
+bool insert_node_after_key(int key, int data);
+int insert_node_piyush(int key, int data);
 
 typedef struct node {
     int data;
@@ -74,16 +75,15 @@ int main(void) {
     //delete_node(103);
     //printf("\nDoes 103 exist ? : %d\n", list_contains(103));
 
-    insert(102, 50);
+    insert_node_after_key(102, 50);
     printf("Does 50 exist ? : %d\n", list_contains(50));
-    insert(103, 104);
+    insert_node_after_key(103, 104);
     printf("Does 104 exist ? : %d\n", list_contains(104));
-    insert(50, 51);
+    insert_node_after_key(50, 51);
     printf("Does 51 exist ? : %d\n", list_contains(51));
 
-    insert(106, 55);
+    insert_node_after_key(106, 55);
     printf("Does 55 exist ? : %d\n", list_contains(55));
-
 
     traverse();
 
@@ -135,7 +135,6 @@ int list_init(int data) {
     DEBUG_PRINT("address of __head = %p\n", &__head);
     DEBUG_PRINT("pointer __head points to = %p\n", __head);
     DEBUG_PRINT("address of __head->data = %p\n", &__head->data);
-
 
     //free(__head);
     return SUCCESS;
@@ -320,7 +319,12 @@ bool delete_node_piyush(int data) {
     return false;
 }
 
-int insert(int key, int data) {
+bool insert_node_after_key(int key, int data) {
+    if(!__head) {
+        printf("List is empty!\n");
+        return EMPTY_LL;
+    }
+
     printf("\n");
 
     for(node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
@@ -339,21 +343,21 @@ int insert(int key, int data) {
             DEBUG_PRINT("next to node with address %p\n", cursor);
             DEBUG_PRINT("New node data: %d\n", n->data);
 
-            return 1;
+            return true;
         }
     }
     DEBUG_PRINT("key %d was not found!\n", key);
 
-    return SUCCESS;
+    return false;
 }
 
-int insert_piyush(int key, int data) {
+int insert_node_piyush(int key, int data) {
     printf("\n");
 
     node_s *k, *n;
 
     for(k = __head; k != NULL; k = k->next_node) {
-        if(k->data = key) {
+        if(k->data == key) {
             break;
         }
     }
