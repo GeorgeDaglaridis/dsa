@@ -24,6 +24,7 @@ int list_init(int data);
 int add_in_the_beginning(int data);
 int add_at_the_end(int data);
 void traverse_ll(void);
+int ll_lenght(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
@@ -239,14 +240,22 @@ void traverse_ll(void) {
 
     printf("\n");
 
-    int i = 0;
+    size_t i = 0;
     for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
         // If you add nodes before the init node (func: add_in_the_beginning) 
         // the last added node is printed first
         // If you add nodes after the init node (func: add_at_the_end) - current strategy- 
         // the last added node is printed last
-        printf("Node[%d]: %d\n", i++, cursor->data);
+        printf("Node[%lu]: %d\n", i++, cursor->data);
     }
+}
+
+int ll_lenght(void) {
+    size_t i = 0;
+    for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
+        i++;
+    }
+    return i;
 }
 
 bool list_contains(int data) {
