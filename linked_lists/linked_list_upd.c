@@ -33,8 +33,9 @@ node_s *__head = NULL;
 list_status list_init(int data);
 list_status add_in_the_beginning(int data);
 list_status add_at_the_end(int data);
-void traverse_ll(void);
 size_t ll_lenght(void);
+void traverse_ll(void);
+list_status reverse(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
@@ -43,6 +44,7 @@ list_status insert_node_after_key(int key, int data);
 list_status insert_node_piyush(int key, int data);
 
 int main(void) {
+
     // printf("sizeof(\"George\") = %ld\n", sizeof("George"));
     // char arr[40] = "George";
     // printf("sizeof(arr) = %ld\n", sizeof(arr));
@@ -56,6 +58,7 @@ int main(void) {
     func_ptr(102);
     func_ptr(103);
     traverse_ll();
+    printf("Linked list has %lu nodes\n", ll_lenght());
 
     printf("\nDoes 100 exist ? : %d\n", list_contains(100));
     printf("Does 101 exist ? : %d\n", list_contains(101));
@@ -89,6 +92,26 @@ int main(void) {
     insert_node_after_key(106, 55);
     printf("Does 55 exist ? : %d\n", list_contains(55));
 
+    traverse_ll();
+    printf("Linked list has %lu nodes\n", ll_lenght());
+    // Reverse
+    reverse();
+    traverse_ll();
+    // Reverse back
+    reverse();
+    traverse_ll();
+
+    func_ptr(105);
+    func_ptr(106);
+    func_ptr(107);
+    traverse_ll();
+    printf("Linked list has %lu nodes\n", ll_lenght());
+
+     // Reverse again
+    reverse();
+    traverse_ll();
+    // Reverse back again
+    reverse();
     traverse_ll();
 
     return 0;
@@ -236,6 +259,16 @@ list_status add_at_the_end(int data) {
     return LIST_OK;
 }
 
+size_t ll_lenght(void) {
+    size_t i = 0;
+    for(const node_s *cursor = __head; 
+                      cursor != NULL; 
+                      cursor = cursor->next_node) {
+        i++;
+    }
+    return i;
+}
+
 void traverse_ll(void) {
     // In this function, checking whether ll is empty is a design choice
     // rather than a necessity.
@@ -257,12 +290,46 @@ void traverse_ll(void) {
     }
 }
 
-size_t ll_lenght(void) {
-    size_t i = 0;
-    for(const node_s *cursor = __head; cursor != NULL; cursor = cursor->next_node) {
-        i++;
+list_status reverse(void) {
+
+    // Since we are using VLAs we have to make sure
+    // that its size is not 0, thus the linked list
+    // is not empty.
+    if(!__head) {
+        printf("Linked list not initialized!\n");
+        return LIST_EMPTY;
     }
-    return i;
+
+    size_t ll_size = ll_lenght();
+
+    node_s *n_arr[ll_size];
+    
+    // Making sure all elements of VLA are initialized to NULL.
+    // Recommended only for VLAs of small length.
+    size_t i = 0;
+    for(i = 0; i < ll_size; i++) {
+        n_arr[i] = NULL;
+    }
+    i = 0;
+
+    size_t count = 0;
+    for(node_s *cursor = __head; 
+                cursor != NULL; 
+                cursor = cursor->next_node) {
+
+        n_arr[count++] = cursor;
+    }
+
+    //__head now points to the last node of the reversed linked list
+    __head = n_arr[count-1];
+    
+    for(i = count - 1; i > 0; i--) {
+        n_arr[i]->next_node = n_arr[i-1];
+    }
+    // The node that was previously pointed by the __head in now the last node in the reversed linked list
+    n_arr[i]->next_node = NULL;
+
+    return LIST_OK;
 }
 
 bool list_contains(int data) {
