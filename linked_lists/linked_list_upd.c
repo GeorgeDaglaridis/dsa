@@ -35,7 +35,7 @@ list_status add_in_the_beginning(int data);
 list_status add_at_the_end(int data);
 size_t ll_lenght(void);
 void traverse_ll(void);
-list_status reverse(void);
+list_status reverse_using_stack(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
@@ -51,6 +51,8 @@ int main(void) {
 
     // int (*func_ptr)(int) = add_in_the_beginning;
     int (*add_node_ptr)(int) = add_at_the_end;
+
+    list_status (*reverse) (void) = reverse_using_stack;
 
     list_init(100);
 
@@ -290,7 +292,8 @@ void traverse_ll(void) {
     }
 }
 
-list_status reverse(void) {
+list_status reverse_using_stack(void) {
+    printf("Reversing ...\n");
 
     // Since we are using VLAs we have to make sure
     // that its size is not 0, thus the linked list
