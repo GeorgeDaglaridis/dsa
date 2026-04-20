@@ -3,13 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define SUCCESS         0
-#define ERR_ALLOC      -1
-#define INV_DATA       -2
-#define ALRD_INIT      -3
-#define EMPTY_LL       -4
-#define KEY_NOT_FOUND  -5
-
 // Not needed in this code but I added it 
 // just for practicing it
 #define DEBUG 1
@@ -20,17 +13,14 @@
     #define DEBUG_PRINT(...)
 #endif
 
-int list_init(int data);
-int add_in_the_beginning(int data);
-int add_at_the_end(int data);
-void traverse_ll(void);
-size_t ll_lenght(void);
-bool list_contains(int data);
-bool delete_node(int data);
-bool delete_node_piyush(int data);
-bool delete_node_piyush_upd(int data);
-int insert_node_after_key(int key, int data);
-int insert_node_piyush(int key, int data);
+typedef enum {
+    LIST_OK = 0,
+    LIST_EMPTY = -1,
+    LIST_ALRD_INIT = -2,
+    LIST_ERR_ALLOC = -3,
+    LIST_INV_DATA = -4,
+    LIST_KEY_NOT_FOUND = -5
+} list_status;
 
 typedef struct node {
     int data;
@@ -39,6 +29,18 @@ typedef struct node {
 } node_s;
 
 node_s *__head = NULL;
+
+list_status list_init(int data);
+list_status add_in_the_beginning(int data);
+list_status add_at_the_end(int data);
+void traverse_ll(void);
+size_t ll_lenght(void);
+bool list_contains(int data);
+bool delete_node(int data);
+bool delete_node_piyush(int data);
+bool delete_node_piyush_upd(int data);
+list_status insert_node_after_key(int key, int data);
+list_status insert_node_piyush(int key, int data);
 
 int main(void) {
     // printf("sizeof(\"George\") = %ld\n", sizeof("George"));
@@ -89,13 +91,13 @@ int main(void) {
 
     traverse_ll();
 
-    return SUCCESS;
+    return 0;
 }
 
-int list_init(int data) {
+list_status list_init(int data) {
     if(__head) {
         printf("Linked list already initialized!\n");
-        return ALRD_INIT;
+        return LIST_ALRD_INIT;
     }
 
     // sizeof(node_s) = 48 in case struct has char data[40]
@@ -116,7 +118,7 @@ int list_init(int data) {
     __head = malloc(sizeof(*__head));
     if(!__head) {
         printf("Init memory allocation failed!\n");
-        return ERR_ALLOC;
+        return LIST_ERR_ALLOC;
     }
 
     // printf("strlen(data) = %ld\n", strlen(data));
@@ -143,20 +145,20 @@ int list_init(int data) {
     DEBUG_PRINT("address of __head->data = %p\n", &__head->data);
 
     //free(__head);
-    return SUCCESS;
+    return LIST_OK;
 }
 
-int add_in_the_beginning(int data) {
+list_status add_in_the_beginning(int data) {
     // Cannot add nodes if you have not initialized first!
     if(!__head) {
         printf("Linked list not initialized!\n");
-        return EMPTY_LL;
+        return LIST_EMPTY;
     }
 
     // 0 is not accepted !
     if(!data) {
         printf("Invalid data!\n");
-        return INV_DATA;
+        return LIST_INV_DATA;
     }
 
     printf("\n");
@@ -164,7 +166,7 @@ int add_in_the_beginning(int data) {
     node_s *n = malloc(sizeof(*n));
     if(!n) {
         printf("New node memory allocation failed!\n");
-        return ERR_ALLOC;
+        return LIST_ERR_ALLOC;
     }
 
     DEBUG_PRINT("address new node n points to: %p\n", n);
@@ -183,20 +185,20 @@ int add_in_the_beginning(int data) {
     __head = n;
     DEBUG_PRINT("address new __head points to: %p\n", __head);
     
-    return SUCCESS;
+    return LIST_OK;
 }
 
-int add_at_the_end(int data) {
+list_status add_at_the_end(int data) {
     // Cannot add nodes if you have not initialized first!
     if(!__head) {
         printf("Linked list not initialized!\n");
-        return EMPTY_LL;
+        return LIST_EMPTY;
     }
 
     // 0 is not accepted !
     if(!data) {
         printf("Invalid data!\n");
-        return INV_DATA;
+        return LIST_INV_DATA;
     }
 
     DEBUG_PRINT("\n");
@@ -204,7 +206,7 @@ int add_at_the_end(int data) {
     node_s *n = malloc(sizeof(*n));
     if(!n) {
         printf("New node memory allocation failed!\n");
-        return ERR_ALLOC;
+        return LIST_ERR_ALLOC;
     }
 
     DEBUG_PRINT("address new node n points to: %p\n", n);
@@ -231,7 +233,7 @@ int add_at_the_end(int data) {
 
     cursor->next_node = n;
 
-    return SUCCESS;
+    return LIST_OK;
 }
 
 void traverse_ll(void) {
@@ -354,10 +356,10 @@ bool delete_node_piyush_upd(int data) {
     return false;
 }
 
-int insert_node_after_key(int key, int data) {
+list_status insert_node_after_key(int key, int data) {
     if(!__head) {
         printf("List is empty!\n");
-        return EMPTY_LL;
+        return LIST_EMPTY;
     }
 
     printf("\n");
@@ -367,7 +369,7 @@ int insert_node_after_key(int key, int data) {
             node_s *n = malloc(sizeof(*n));
             if(!n) {
                 printf("New node memory allocation failed!\n");
-                return ERR_ALLOC;
+                return LIST_ERR_ALLOC;
             }
 
             n->data = data;
@@ -378,17 +380,17 @@ int insert_node_after_key(int key, int data) {
             DEBUG_PRINT("next to node with address %p\n", cursor);
             DEBUG_PRINT("New node data: %d\n", n->data);
 
-            return SUCCESS;
+            return LIST_OK;
         }
     }
     DEBUG_PRINT("key %d was not found!\n", key);
 
-    return KEY_NOT_FOUND;
+    return LIST_KEY_NOT_FOUND;
 }
 
 // I think I like the way this function is written
 // by piuysh more than mine.
-int insert_node_piyush(int key, int data) {
+list_status insert_node_piyush(int key, int data) {
     printf("\n");
 
     node_s *k, *n;
@@ -401,13 +403,13 @@ int insert_node_piyush(int key, int data) {
 
     if(!k) {
         printf("Insertion failed: Key was not found!\n");
-        return KEY_NOT_FOUND;
+        return LIST_KEY_NOT_FOUND;
     }
 
     n = malloc(sizeof(*n));
     if(!n) {
         printf("Insertion failed: New node memory allocation failed!\n");
-        return ERR_ALLOC;
+        return LIST_ERR_ALLOC;
     }
 
     n->data = data;
@@ -418,5 +420,5 @@ int insert_node_piyush(int key, int data) {
     DEBUG_PRINT("next to node with address %p\n", k);
     DEBUG_PRINT("New node data: %d\n", n->data);
 
-    return SUCCESS;
+    return LIST_OK;
 }
