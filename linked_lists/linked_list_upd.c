@@ -50,13 +50,13 @@ int main(void) {
     // printf("sizeof(arr) = %ld\n", sizeof(arr));
 
     // int (*func_ptr)(int) = add_in_the_beginning;
-    int (*func_ptr)(int) = add_at_the_end;
+    int (*add_node_ptr)(int) = add_at_the_end;
 
     list_init(100);
 
-    func_ptr(101);
-    func_ptr(102);
-    func_ptr(103);
+    add_node_ptr(101);
+    add_node_ptr(102);
+    add_node_ptr(103);
     traverse_ll();
     printf("Linked list has %lu nodes\n", ll_lenght());
 
@@ -101,9 +101,9 @@ int main(void) {
     reverse();
     traverse_ll();
 
-    func_ptr(105);
-    func_ptr(106);
-    func_ptr(107);
+    add_node_ptr(105);
+    add_node_ptr(106);
+    add_node_ptr(107);
     traverse_ll();
     printf("Linked list has %lu nodes\n", ll_lenght());
 
