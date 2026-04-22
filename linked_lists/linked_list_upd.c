@@ -36,6 +36,7 @@ list_status add_at_the_end(int data);
 size_t ll_lenght(void);
 void traverse_ll(void);
 list_status reverse_using_stack(void);
+list_status reverse_using_heap(void);
 bool list_contains(int data);
 bool delete_node(int data);
 bool delete_node_piyush(int data);
@@ -49,10 +50,91 @@ int main(void) {
     // char arr[40] = "George";
     // printf("sizeof(arr) = %ld\n", sizeof(arr));
 
+    node_s *n = NULL;
+    printf("sizeof(n) = %ld\n", sizeof(n));
+    printf("sizeof(node_s) = %ld\n", sizeof(node_s));
+    printf("sizeof(*n) = %ld\n", sizeof(*n));
+
+    node_s node1 = {.data = 10, .next_node = (node_s *)0x04};
+    node_s *n1 = &node1;
+    printf("sizeof(node1) = %ld\n", sizeof(node1));
+    printf("sizeof(n1) = %ld\n", sizeof(n1));
+    printf("sizeof(*n1) = %ld\n\n", sizeof(*n1));
+
+    printf("address of node1 = %p\n", &node1);
+    printf("n1 point to = %p\n\n", n1);
+
+    node_s node2 = {.data = 20, .next_node = (node_s *)0x05};
+    node_s *n2 = &node2;
+    printf("address of node2 = %p\n", &node2);
+    printf("n2 point to = %p\n\n", n2);
+
+    node_s node3 = {.data = 30, .next_node = (node_s *)0x06};
+    node_s *n3 = &node3;
+    printf("address of node3 = %p\n", &node3);
+    printf("n3 point to = %p\n\n", n3);
+
+    node_s node4 = {.data = 40, .next_node = (node_s *)0x07};
+    node_s *n4 = &node4;
+    printf("address of node4 = %p\n", &node4);
+    printf("n4 point to = %p\n\n", n4);
+
+    node_s node5 = {.data = 50, .next_node = (node_s *)0x08};
+    node_s *n5 = &node5;
+    printf("address of node5 = %p\n", &node5);
+    printf("n5 point to = %p\n\n", n5);
+
+    // Array of pointers to node_s
+    node_s *n_arr[5] = {n1, n2, n3, n4, n5};
+    printf("n_arr[0] points to = %p\n", n_arr[0]);
+    printf("n_arr[1] points to = %p\n", n_arr[1]);
+    printf("n_arr[2] points to = %p\n", n_arr[2]);
+    printf("n_arr[3] points to = %p\n", n_arr[3]);
+    printf("n_arr[4] points to = %p\n", n_arr[4]);
+
+    printf("n_arr[0]->data = %d\n", n_arr[0]->data);
+    printf("n_arr[0]->next_node = 0x%x\n", n_arr[0]->next_node);
+    printf("(*n_arr[0]).data = %d\n", (*n_arr[0]).data);
+    printf("(*n_arr[0]).next_node = 0x%x\n", (*n_arr[0]).next_node);
+
+    printf("sizeof(n_arr) = %ld\n", sizeof(n_arr)); // 5 * 8 = 40 bytes
+    // n_arr[0] is a pointer pointing to node_s structure.
+    printf("sizeof(n_arr[0]) = %ld\n", sizeof(n_arr[0])); // 8 bytes
+    // Dereferencing pointer n_arr[0]. *n_arr[0] shows inside node_s structure that pointer n_arr[0] points to
+    printf("sizeof(*n_arr[0]) = %ld\n", sizeof(*n_arr[0])); // 16 bytes
+
+    // Starting address of arr which is essentially the address of the first element of arr
+    printf("address of n_arr = %p\n", n_arr);
+    printf("&n_arr = %p\n", &n_arr);
+    printf("address of n_arr[0] = %p\n", &n_arr[0]);
+    // Dereferencing the starting address of arr which is also a pointer which points to a node_s struc.
+    printf("sizeof(*n_arr) = %ld\n", sizeof(*n_arr));
+
+    node_s **n1a = &n1;
+    printf("&n1 %p\n", &n1);
+    printf("address n1a points to %p\n", n1a);
+    printf("*n1a: address n1 points to %p", *n1a);
+    printf("(*n1a)->data: %d or (**n1a).data: %d\n", (*n1a)->data, (**n1a).data);
+    
+    node_s **n2a = &n2;
+    node_s **n3a = &n3;
+    node_s **n4a = &n4;
+    node_s **n5a = &n5;
+
+    node_s **na_arr[] = {n1a, n2a, n3a, n4a, n5a};
+    //node_s **na_arr1 = {n1a, n2a, n3a, n4a, n5a};
+    //printf("address n1a points to %p\n", na_arr1[0]);
+    // printf("sizeof(n_arr2) = %ld\n", sizeof(n_arr2));
+    // printf("sizeof(*n_arr2) = %ld\n", sizeof(*n_arr2));
+    // printf("sizeof(**n_arr2) = %ld\n", sizeof(**n_arr2));
+
+
+
     // int (*func_ptr)(int) = add_in_the_beginning;
     int (*add_node_ptr)(int) = add_at_the_end;
 
-    list_status (*reverse) (void) = reverse_using_stack;
+    //list_status (*reverse) (void) = reverse_using_stack;
+    list_status (*reverse) (void) = reverse_using_heap;
 
     list_init(100);
 
@@ -293,7 +375,7 @@ void traverse_ll(void) {
 }
 
 list_status reverse_using_stack(void) {
-    printf("Reversing ...\n");
+    printf("Reversing using stack ...\n");
 
     // Since we are using VLAs we have to make sure
     // that its size is not 0, thus the linked list
@@ -326,6 +408,40 @@ list_status reverse_using_stack(void) {
     //__head now points to the last node of the reversed linked list
     __head = n_arr[count-1];
     
+    for(i = count - 1; i > 0; i--) {
+        n_arr[i]->next_node = n_arr[i-1];
+    }
+    // The node that was previously pointed by the __head in now the last node in the reversed linked list
+    n_arr[i]->next_node = NULL;
+
+    return LIST_OK;
+}
+
+list_status reverse_using_heap(void) {
+    printf("Reversing using heap ...\n");
+
+    size_t ll_size = ll_lenght();
+
+    // Allocate memory in heap and initialize to zero/NULL at once
+    node_s **n_arr = calloc(ll_size, sizeof(*n_arr));
+    if(!n_arr) {
+        printf("Memory allocation failed!\n");
+        return LIST_ERR_ALLOC;
+    }
+
+    size_t count = 0;
+    for(node_s *cursor = __head;
+                cursor != NULL;
+                cursor = cursor->next_node) {
+
+        n_arr[count++] = cursor;
+        // *(n_arr + count++) = cursor; // the sames
+    }
+
+    //__head now points to the last node of the reversed linked list
+    __head = n_arr[count-1];
+
+    int i = 0;
     for(i = count - 1; i > 0; i--) {
         n_arr[i]->next_node = n_arr[i-1];
     }
