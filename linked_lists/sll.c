@@ -1,34 +1,9 @@
 // sll stands for single linked list
 
+#include "sll.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define SUCCESS    0
-#define ERR_ALLOC -1
-#define INV_DATA  -2
-#define ALRD_INIT -3
-#define EMPTY_LL  -4
-
-// Not needed in this code but I added it 
-// just for practicing it
-#define DEBUG 1
-
-#if DEBUG
-    #define DEBUG_PRINT(...) printf(__VA_ARGS__)
-#else
-    #define DEBUG_PRINT(...)
-#endif
-
-int list_init(int data);
-int add_in_the_beginning(int data);
-int add_at_the_end(int data);
-int traverse(void);
-int exists(int data);
-int delete(int data);
-int delete_piyush(int data);
-int insert(int key, int data);
-int insert_piyush(int key, int data);
 
 typedef struct node {
     int data;
@@ -36,60 +11,7 @@ typedef struct node {
 
 } node_s;
 
-node_s *__head = NULL;
-
-int main(void) {
-    // printf("sizeof(\"George\") = %ld\n", sizeof("George"));
-    // char arr[40] = "George";
-    // printf("sizeof(arr) = %ld\n", sizeof(arr));
-
-    // int (*func_ptr)(int) = add_in_the_beginning;
-    int (*func_ptr)(int) = add_at_the_end;
-
-    list_init(100);
-
-    func_ptr(101);
-    func_ptr(102);
-    func_ptr(103);
-    traverse();
-
-    printf("\nDoes 100 exist ? : %d\n", exists(100));
-    printf("Does 101 exist ? : %d\n", exists(101));
-    printf("Does 102 exist ? : %d\n", exists(102));
-    printf("Does 103 exist ? : %d\n", exists(103));
-    printf("Does 104 exist ? : %d\n", exists(104));
-    printf("Does 105 exist ? : %d\n", exists(105));
-
-    //delete(100);
-    //printf("\nDoes 100 exist ? : %d\n", exists(100));
-    
-    /*
-    delete(101);
-    printf("Does 101 exist ? : %d\n", exists(101));
-    delete(102);
-    printf("Does 102 exist ? : %d\n", exists(102));
-    delete(100);
-    printf("Does 100 exist ? : %d\n", exists(100));
-    */
-
-    //delete(103);
-    //printf("\nDoes 103 exist ? : %d\n", exists(103));
-
-    insert(102, 50);
-    printf("Does 50 exist ? : %d\n", exists(50));
-    insert(103, 104);
-    printf("Does 104 exist ? : %d\n", exists(104));
-    insert(50, 51);
-    printf("Does 51 exist ? : %d\n", exists(51));
-
-    insert(106, 55);
-    printf("Does 55 exist ? : %d\n", exists(55));
-
-
-    traverse();
-
-    return SUCCESS;
-}
+static node_s *__head = NULL;
 
 int list_init(int data) {
     if(__head) {
@@ -136,7 +58,6 @@ int list_init(int data) {
     DEBUG_PRINT("address of __head = %p\n", &__head);
     DEBUG_PRINT("pointer __head points to = %p\n", __head);
     DEBUG_PRINT("address of __head->data = %p\n", &__head->data);
-
 
     //free(__head);
     return SUCCESS;
@@ -262,7 +183,7 @@ int exists(int data) {
     return 0;
 }
 
-int delete(int data) {
+int delete_node(int data) {
     printf("\n");
 
     node_s *prev_cursor = NULL;
@@ -300,7 +221,7 @@ int delete(int data) {
 // I am not sure it takes into consideration the deletion of the 
 // very first node of the linked list, nor that it is actuall needed
 // or have to be deleted.
-int delete_piyush(int data) {
+int delete_node_piyush(int data) {
     for(node_s *p = NULL, *c = __head;
                 c != NULL;
                 p = c, c = c->next_node) {
