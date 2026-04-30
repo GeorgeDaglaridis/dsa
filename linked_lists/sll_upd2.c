@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define DEBUG 1
 
@@ -88,6 +89,25 @@ int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data) {
     return 0;
 }
 
+bool delete_node(node_s **sll_head, char *ll_name, int data) {
+    
+    for(node_s *p = NULL, *c = *sll_head; c != NULL; p = c, c = c->next_node) {
+        if(c->data == data) {
+            if(c == *sll_head) {
+                (*sll_head) = c->next_node;
+            }
+            else {
+                p->next_node = c->next_node;
+            }
+            printf("%s: Node at address %p with data %d just deleted\n", ll_name, c, data);
+            free(c);
+                        
+            return true;
+        }
+    }
+    return false;
+}
+
 void traverse_sll(node_s *sll_head, char *ll_name) {
 
     size_t i = 0;
@@ -148,12 +168,20 @@ int main(void) {
     }
     traverse_sll(__head_sll1, "sll1");
 
+    /*
     if( insert_node_after_key(__head_sll1, "sll1", 40, 45) != 0 ) {
         exit(1);
     }
     else {
         printf("Node inserted ...\n");
     }
+    */
+
+    delete_node(&__head_sll1, "sll1", 20);
+    delete_node(&__head_sll1, "sll1", 30);
+    traverse_sll(__head_sll1, "sll1");
+    delete_node(&__head_sll1, "sll1", 10);
+    traverse_sll(__head_sll1, "sll1");
 
     // Create empty single linked list 2 (no elements/nodes yet)
     node_s *__head_sll2 = NULL;
