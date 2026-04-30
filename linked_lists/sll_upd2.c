@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG
     #define DEBUG_PRINT(...) printf(__VA_ARGS__)
@@ -51,7 +51,39 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
     }
     cursor->next_node = n;
     
-    DEBUG_PRINT("New node of %s created at address %p with data %d\n", ll_name, n, n->data);
+    DEBUG_PRINT("New node appended in %s at address %p with data %d\n", ll_name, n, n->data);
+
+    return 0;
+}
+
+int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data) {
+
+    node_s *k = NULL, *n = NULL;
+
+    for(k = sll_head; k != NULL;
+                       k = k->next_node) {
+
+        if(k->data == key) {
+            break;
+        }
+    }
+
+    if(!k) {
+        printf("Insertion failed: Key %d was not found!\n", key);
+        return -2;
+    }
+
+    n = malloc(sizeof(node_s));
+    if(!n) {
+        printf("Memory allocation of node failed!\n");
+        return -1;
+    }
+
+    n->data = data;
+    n->next_node = k->next_node;
+    k->next_node = n;
+
+    DEBUG_PRINT("New node inserted in %s after key %d at address %p with data %d\n", ll_name, key, n, n->data);
 
     return 0;
 }
@@ -100,7 +132,29 @@ int main(void) {
         exit(1);
     }
     traverse_sll(__head_sll1, "sll1");
-    
+
+    if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != 0 ) {
+        exit(1);
+    }
+    else {
+        printf("Node inserted ...\n");
+    }
+
+    if( insert_node_after_key(__head_sll1, "sll1", 30, 35) != 0 ) {
+        exit(1);
+    }
+    else {
+        printf("Node inserted ...\n");
+    }
+    traverse_sll(__head_sll1, "sll1");
+
+    if( insert_node_after_key(__head_sll1, "sll1", 40, 45) != 0 ) {
+        exit(1);
+    }
+    else {
+        printf("Node inserted ...\n");
+    }
+
     // Create empty single linked list 2 (no elements/nodes yet)
     node_s *__head_sll2 = NULL;
 
