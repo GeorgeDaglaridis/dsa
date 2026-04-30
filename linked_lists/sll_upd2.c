@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG
     #define DEBUG_PRINT(...) printf(__VA_ARGS__)
@@ -23,7 +23,7 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
 
         *sll_head = malloc(sizeof(node_s));
         if(!(*sll_head)) {
-            printf("Memory allocation failed!\n");
+            printf("Memory allocation of init node failed!\n");
             return -1;
         }
         (*sll_head)->data = data;
@@ -37,7 +37,7 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
     // Create and connect new node with the previous one
     node_s *n = malloc(sizeof(node_s));
     if(!n) {
-        printf("Memory allocation failed!\n");
+        printf("Memory allocation of node failed!\n");
         return -1;
     }
     n->next_node = NULL;
@@ -72,25 +72,51 @@ int main(void) {
     // Create empty single linked list 1 (no elements/nodes yet)
     node_s *__head_sll1 = NULL;
 
-    append_node(&__head_sll1, "sll1", 10);
-    traverse_sll(__head_sll1, "sll1");
+    if( append_node(&__head_sll1, "sll1", 10) == 0 ) {
+        printf("Init node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+    //traverse_sll(__head_sll1, "sll1");
 
     // We print __head_sll1, we do not iterate over the linked list 1
     //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
     //__head_sll1->data = 20;
     //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
     
-    append_node(&__head_sll1, "sll1", 20);
+    if( append_node(&__head_sll1, "sll1", 20) == 0 ) {
+        printf("Node added ...\n");
+    }
+    else {
+        exit(1);
+    }
     //traverse_sll(__head_sll1);
-    append_node(&__head_sll1, "sll1", 30);
+
+    if( append_node(&__head_sll1, "sll1", 30) == 0 ) {
+        printf("Node added ...\n");
+    }
+    else {
+        exit(1);
+    }
     traverse_sll(__head_sll1, "sll1");
     
     // Create empty single linked list 2 (no elements/nodes yet)
     node_s *__head_sll2 = NULL;
 
-    append_node(&__head_sll2, "sll2", 100);
-    //traverse_sll(__head_sll2);
-    append_node(&__head_sll2, "sll2", 200);
+    if( append_node(&__head_sll2, "sll2", 100) == 0 ) {
+        printf("Init node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+
+    if( append_node(&__head_sll2, "sll2", 200) == 0 ) {
+        printf("Node added ...\n");
+    }
+    else {
+        exit(1);
+    }
     traverse_sll(__head_sll2, "sll2");
 
     return 0;
