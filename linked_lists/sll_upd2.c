@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG 1
+
+#if DEBUG
+    #define DEBUG_PRINT(...) printf(__VA_ARGS__)
+#else
+    #define DEBUG_PRINT(...)
+#endif
+
 typedef struct node {
     int data;
     struct node *next_node;
@@ -21,7 +29,7 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
         (*sll_head)->data = data;
         (*sll_head)->next_node = NULL;
 
-        printf("Init node of %s created at address %p with data %d\n", ll_name, *sll_head, (*sll_head)->data);
+        DEBUG_PRINT("Init node of %s created at address %p with data %d\n", ll_name, *sll_head, (*sll_head)->data);
 
         return 0;
     }
@@ -43,7 +51,7 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
     }
     cursor->next_node = n;
     
-    printf("New node of %s created at address %p with data %d\n", ll_name, n, n->data);
+    DEBUG_PRINT("New node of %s created at address %p with data %d\n", ll_name, n, n->data);
 
     return 0;
 }
