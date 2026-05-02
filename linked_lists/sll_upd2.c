@@ -58,7 +58,7 @@ int main(void) {
     //__head_sll1->data = 20;
     //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
     
-    if( append_node(&__head_sll1, "sll1", 20) == 0 ) {
+    if( append_node(&__head_sll1, "sll1", 20) == LIST_OK ) {
         printf("Node added ...\n");
     }
     else {
@@ -66,7 +66,7 @@ int main(void) {
     }
     //traverse_sll(__head_sll1);
 
-    if( append_node(&__head_sll1, "sll1", 30) == 0 ) {
+    if( append_node(&__head_sll1, "sll1", 30) == LIST_OK ) {
         printf("Node added ...\n");
     }
     else {
@@ -79,14 +79,14 @@ int main(void) {
     printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
     printf("Does 40 exist ? : %d\n", list_contains(__head_sll1, 40));
 
-    if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != 0 ) {
+    if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != LIST_OK ) {
         exit(1);
     }
     else {
         printf("Node inserted ...\n");
     }
 
-    if( insert_node_after_key(__head_sll1, "sll1", 30, 35) != 0 ) {
+    if( insert_node_after_key(__head_sll1, "sll1", 30, 35) != LIST_OK ) {
         exit(1);
     }
     else {
@@ -129,14 +129,14 @@ int main(void) {
     // Create empty single linked list 2 (no elements/nodes yet)
     node_s *__head_sll2 = NULL;
 
-    if( append_node(&__head_sll2, "sll2", 100) == 0 ) {
+    if( append_node(&__head_sll2, "sll2", 100) == LIST_OK ) {
         printf("Init node added ...\n");
     }
     else {
         exit(1);
     }
 
-    if( append_node(&__head_sll2, "sll2", 200) == 0 ) {
+    if( append_node(&__head_sll2, "sll2", 200) == LIST_OK ) {
         printf("Node added ...\n");
     }
     else {
