@@ -10,6 +10,15 @@
     #define DEBUG_PRINT(...)
 #endif
 
+typedef enum {
+    LIST_OK = 0,
+    LIST_EMPTY = -1,
+    LIST_ALRD_INIT = -2,
+    LIST_ERR_ALLOC = -3,
+    LIST_INV_DATA = -4,
+    LIST_KEY_NOT_FOUND = -5
+} list_status;
+
 typedef struct node {
     int data;
     struct node *next_node;
@@ -17,13 +26,13 @@ typedef struct node {
 } node_s;
 
 // Add a new node always at the end of the linked list
-int append_node(node_s **sll_head, char *ll_name, int data);
+list_status append_node(node_s **sll_head, char *ll_name, int data);
 // Insert a new node after a specific key in the linked list
-int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data);
+list_status insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data);
 // Delete a new node with a specific key from the linked list
 bool delete_node(node_s **sll_head, char *ll_name, int data);
 // Reverse the whole linked list
-int reverse(node_s **sll_head);
+list_status reverse(node_s **sll_head);
 // Traverse the whole linked list
 void traverse_sll(node_s *sll_head, char *ll_name);
 // Length of the linked list
@@ -139,7 +148,7 @@ int main(void) {
 }
 
 // Add a new node always at the end of the linked list
-int append_node(node_s **sll_head, char *ll_name, int data) {
+list_status append_node(node_s **sll_head, char *ll_name, int data) {
 
     // if __head_sll1 is NULL, list is empty so needs to be init it once!
     if(!(*sll_head)) {
@@ -147,21 +156,21 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
         *sll_head = malloc(sizeof(node_s));
         if(!(*sll_head)) {
             printf("Memory allocation of init node failed!\n");
-            return -1;
+            return LIST_ERR_ALLOC;
         }
         (*sll_head)->data = data;
         (*sll_head)->next_node = NULL;
 
         DEBUG_PRINT("Init node of %s created at address %p with data %d\n", ll_name, *sll_head, (*sll_head)->data);
 
-        return 0;
+        return LIST_OK;
     }
 
     // Create and connect new node with the previous one
     node_s *n = malloc(sizeof(node_s));
     if(!n) {
         printf("Memory allocation of node failed!\n");
-        return -1;
+        return LIST_ERR_ALLOC;
     }
     n->next_node = NULL;
     n->data = data;
@@ -176,10 +185,10 @@ int append_node(node_s **sll_head, char *ll_name, int data) {
     
     DEBUG_PRINT("New node appended in %s at address %p with data %d\n", ll_name, n, n->data);
 
-    return 0;
+    return LIST_OK;
 }
 
-int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data) {
+list_status insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data) {
 
     node_s *k = NULL, *n = NULL;
 
@@ -193,13 +202,13 @@ int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data) {
 
     if(!k) {
         printf("Insertion failed: Key %d was not found!\n", key);
-        return -2;
+        return LIST_KEY_NOT_FOUND;
     }
 
     n = malloc(sizeof(node_s));
     if(!n) {
         printf("Memory allocation of node failed!\n");
-        return -1;
+        return LIST_ERR_ALLOC;
     }
 
     n->data = data;
@@ -208,7 +217,7 @@ int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data) {
 
     DEBUG_PRINT("New node inserted in %s after key %d at address %p with data %d\n", ll_name, key, n, n->data);
 
-    return 0;
+    return LIST_OK;
 }
 
 bool delete_node(node_s **sll_head, char *ll_name, int data) {
@@ -230,7 +239,7 @@ bool delete_node(node_s **sll_head, char *ll_name, int data) {
     return false;
 }
 
-int reverse(node_s **sll_head) {
+list_status reverse(node_s **sll_head) {
     printf("Reversing ...\n");
 
     size_t ll_size = ll_lenght(*sll_head);
@@ -239,7 +248,7 @@ int reverse(node_s **sll_head) {
     node_s **n_arr = calloc(ll_size, sizeof(*n_arr));
     if(!n_arr) {
         printf("Memory allocation failed!\n");
-        return -1;
+        return LIST_ERR_ALLOC;
     }
 
     size_t count = 0;
@@ -261,7 +270,7 @@ int reverse(node_s **sll_head) {
     // The node that was previously pointed by the __head in now the last node in the reversed linked list
     n_arr[i]->next_node = NULL;
 
-    return 0;
+    return LIST_OK;
 }
 
 void traverse_sll(node_s *sll_head, char *ll_name) {
