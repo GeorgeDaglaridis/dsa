@@ -119,7 +119,7 @@ void traverse_sll(node_s *sll_head, char *ll_name) {
     }
 }
 
-size_t ll_lenght(node_s *sll_head) {
+size_t ll_lenght(const node_s *sll_head) {
     size_t i = 0;
     for(const node_s *cursor = sll_head; 
                       cursor != NULL; 
@@ -127,6 +127,15 @@ size_t ll_lenght(node_s *sll_head) {
         i++;
     }
     return i;
+}
+
+bool list_contains(const node_s *sll_head, int data) {
+    for(const node_s *cursor = sll_head; cursor != NULL; cursor = cursor->next_node) {
+        if(cursor->data == data) {
+            return true;
+        }
+    }
+    return false;
 }
 
 int main(void) {
@@ -163,6 +172,10 @@ int main(void) {
     }
     printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
+    printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
+    printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
+    printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
+    printf("Does 40 exist ? : %d\n", list_contains(__head_sll1, 40));
 
     if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != 0 ) {
         exit(1);
@@ -179,6 +192,9 @@ int main(void) {
     }
     printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
+    printf("Does 25 exist ? : %d\n", list_contains(__head_sll1, 25));
+    printf("Does 35 exist ? : %d\n", list_contains(__head_sll1, 35));
+    printf("Does 45 exist ? : %d\n", list_contains(__head_sll1, 45));
 
     /*
     if( insert_node_after_key(__head_sll1, "sll1", 40, 45) != 0 ) {
@@ -196,6 +212,11 @@ int main(void) {
     delete_node(&__head_sll1, "sll1", 10);
     printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
+    printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
+    printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
+    printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
+
+    printf("\n\n");
 
     // Create empty single linked list 2 (no elements/nodes yet)
     node_s *__head_sll2 = NULL;
