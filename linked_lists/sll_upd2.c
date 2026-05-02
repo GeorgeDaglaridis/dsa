@@ -32,7 +32,7 @@ list_status insert_node_after_key(node_s *sll_head, char *ll_name, int key, int 
 // Delete a new node with a specific key from the linked list
 bool delete_node(node_s **sll_head, char *ll_name, int data);
 // Reverse the whole linked list
-list_status reverse(node_s **sll_head);
+list_status reverse(node_s **sll_head, char *ll_name);
 // Traverse the whole linked list
 void traverse_sll(node_s *sll_head, char *ll_name);
 // Length of the linked list
@@ -98,10 +98,10 @@ int main(void) {
     printf("Does 35 exist ? : %d\n", list_contains(__head_sll1, 35));
     printf("Does 45 exist ? : %d\n", list_contains(__head_sll1, 45));
     printf("\n");
-    reverse(&__head_sll1);
+    reverse(&__head_sll1, "sll1");
     traverse_sll(__head_sll1, "sll1");
     printf("\n");
-    reverse(&__head_sll1);
+    reverse(&__head_sll1, "sll1");
     traverse_sll(__head_sll1, "sll1");
 
     /*
@@ -123,6 +123,13 @@ int main(void) {
     printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
     printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
     printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
+
+    /*
+    delete_node(&__head_sll1, "sll1", 25);
+    delete_node(&__head_sll1, "sll1", 35);
+    // Check what happens if list is empty and you want to remove a node
+    delete_node(&__head_sll1, "sll1", 40);
+    */
 
     printf("\n\n");
 
@@ -221,6 +228,12 @@ list_status insert_node_after_key(node_s *sll_head, char *ll_name, int key, int 
 }
 
 bool delete_node(node_s **sll_head, char *ll_name, int data) {
+
+    // If you have removed all nodes and you want to remove one more
+    if(!*sll_head) {
+        printf("Linked list is empty!\n");
+        return false;
+    }
     
     for(node_s *p = NULL, *c = *sll_head; c != NULL; p = c, c = c->next_node) {
         if(c->data == data) {
@@ -239,8 +252,15 @@ bool delete_node(node_s **sll_head, char *ll_name, int data) {
     return false;
 }
 
-list_status reverse(node_s **sll_head) {
-    printf("Reversing ...\n");
+list_status reverse(node_s **sll_head, char *ll_name) {
+
+    // If you have removed all nodes and you want to remove one more
+    if(!*sll_head) {
+        printf("Linked list is empty!\n");
+        return false;
+    }
+
+    printf("Reversing %s ...\n", ll_name);
 
     size_t ll_size = ll_lenght(*sll_head);
 
