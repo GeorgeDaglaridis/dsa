@@ -119,6 +119,16 @@ void traverse_sll(node_s *sll_head, char *ll_name) {
     }
 }
 
+size_t ll_lenght(node_s *sll_head) {
+    size_t i = 0;
+    for(const node_s *cursor = sll_head; 
+                      cursor != NULL; 
+                      cursor = cursor->next_node) {
+        i++;
+    }
+    return i;
+}
+
 int main(void) {
 
     // Create empty single linked list 1 (no elements/nodes yet)
@@ -151,6 +161,7 @@ int main(void) {
     else {
         exit(1);
     }
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
 
     if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != 0 ) {
@@ -166,6 +177,7 @@ int main(void) {
     else {
         printf("Node inserted ...\n");
     }
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
 
     /*
@@ -179,8 +191,10 @@ int main(void) {
 
     delete_node(&__head_sll1, "sll1", 20);
     delete_node(&__head_sll1, "sll1", 30);
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
     delete_node(&__head_sll1, "sll1", 10);
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
     traverse_sll(__head_sll1, "sll1");
 
     // Create empty single linked list 2 (no elements/nodes yet)
