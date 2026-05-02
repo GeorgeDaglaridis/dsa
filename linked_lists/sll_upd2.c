@@ -17,6 +17,128 @@ typedef struct node {
 } node_s;
 
 // Add a new node always at the end of the linked list
+int append_node(node_s **sll_head, char *ll_name, int data);
+// Insert a new node after a specific key in the linked list
+int insert_node_after_key(node_s *sll_head, char *ll_name, int key, int data);
+// Delete a new node with a specific key from the linked list
+bool delete_node(node_s **sll_head, char *ll_name, int data);
+// Reverse the whole linked list
+int reverse(node_s **sll_head);
+// Traverse the whole linked list
+void traverse_sll(node_s *sll_head, char *ll_name);
+// Length of the linked list
+size_t ll_lenght(const node_s *sll_head);
+// Check if given data exist in the linked list
+bool list_contains(const node_s *sll_head, int data);
+
+int main(void) {
+
+    // Create empty single linked list 1 (no elements/nodes yet)
+    node_s *__head_sll1 = NULL;
+
+    if( append_node(&__head_sll1, "sll1", 10) == 0 ) {
+        printf("Init node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+    //traverse_sll(__head_sll1, "sll1");
+
+    // We print __head_sll1, we do not iterate over the linked list 1
+    //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
+    //__head_sll1->data = 20;
+    //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
+    
+    if( append_node(&__head_sll1, "sll1", 20) == 0 ) {
+        printf("Node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+    //traverse_sll(__head_sll1);
+
+    if( append_node(&__head_sll1, "sll1", 30) == 0 ) {
+        printf("Node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
+    traverse_sll(__head_sll1, "sll1");
+    printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
+    printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
+    printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
+    printf("Does 40 exist ? : %d\n", list_contains(__head_sll1, 40));
+
+    if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != 0 ) {
+        exit(1);
+    }
+    else {
+        printf("Node inserted ...\n");
+    }
+
+    if( insert_node_after_key(__head_sll1, "sll1", 30, 35) != 0 ) {
+        exit(1);
+    }
+    else {
+        printf("Node inserted ...\n");
+    }
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
+    traverse_sll(__head_sll1, "sll1");
+    printf("Does 25 exist ? : %d\n", list_contains(__head_sll1, 25));
+    printf("Does 35 exist ? : %d\n", list_contains(__head_sll1, 35));
+    printf("Does 45 exist ? : %d\n", list_contains(__head_sll1, 45));
+    printf("\n");
+    reverse(&__head_sll1);
+    traverse_sll(__head_sll1, "sll1");
+    printf("\n");
+    reverse(&__head_sll1);
+    traverse_sll(__head_sll1, "sll1");
+
+    /*
+    if( insert_node_after_key(__head_sll1, "sll1", 40, 45) != 0 ) {
+        exit(1);
+    }
+    else {
+        printf("Node inserted ...\n");
+    }
+    */
+
+    delete_node(&__head_sll1, "sll1", 20);
+    delete_node(&__head_sll1, "sll1", 30);
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
+    traverse_sll(__head_sll1, "sll1");
+    delete_node(&__head_sll1, "sll1", 10);
+    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
+    traverse_sll(__head_sll1, "sll1");
+    printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
+    printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
+    printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
+
+    printf("\n\n");
+
+    // Create empty single linked list 2 (no elements/nodes yet)
+    node_s *__head_sll2 = NULL;
+
+    if( append_node(&__head_sll2, "sll2", 100) == 0 ) {
+        printf("Init node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+
+    if( append_node(&__head_sll2, "sll2", 200) == 0 ) {
+        printf("Node added ...\n");
+    }
+    else {
+        exit(1);
+    }
+    traverse_sll(__head_sll2, "sll2");
+
+    return 0;
+}
+
+// Add a new node always at the end of the linked list
 int append_node(node_s **sll_head, char *ll_name, int data) {
 
     // if __head_sll1 is NULL, list is empty so needs to be init it once!
@@ -108,6 +230,40 @@ bool delete_node(node_s **sll_head, char *ll_name, int data) {
     return false;
 }
 
+int reverse(node_s **sll_head) {
+    printf("Reversing ...\n");
+
+    size_t ll_size = ll_lenght(*sll_head);
+
+    // Allocate memory in heap and initialize to zero/NULL at once
+    node_s **n_arr = calloc(ll_size, sizeof(*n_arr));
+    if(!n_arr) {
+        printf("Memory allocation failed!\n");
+        return -1;
+    }
+
+    size_t count = 0;
+    for(node_s *cursor = *sll_head;
+                cursor != NULL;
+                cursor = cursor->next_node) {
+
+        n_arr[count++] = cursor;
+        // *(n_arr + count++) = cursor; // the sames
+    }
+
+    //__head now points to the last node of the reversed linked list
+    *sll_head = n_arr[count-1];
+
+    int i = 0;
+    for(i = count - 1; i > 0; i--) {
+        n_arr[i]->next_node = n_arr[i-1];
+    }
+    // The node that was previously pointed by the __head in now the last node in the reversed linked list
+    n_arr[i]->next_node = NULL;
+
+    return 0;
+}
+
 void traverse_sll(node_s *sll_head, char *ll_name) {
 
     size_t i = 0;
@@ -136,105 +292,4 @@ bool list_contains(const node_s *sll_head, int data) {
         }
     }
     return false;
-}
-
-int main(void) {
-
-    // Create empty single linked list 1 (no elements/nodes yet)
-    node_s *__head_sll1 = NULL;
-
-    if( append_node(&__head_sll1, "sll1", 10) == 0 ) {
-        printf("Init node added ...\n");
-    }
-    else {
-        exit(1);
-    }
-    //traverse_sll(__head_sll1, "sll1");
-
-    // We print __head_sll1, we do not iterate over the linked list 1
-    //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
-    //__head_sll1->data = 20;
-    //printf("Node at address %p with data %d\n", __head_sll1, __head_sll1->data);
-    
-    if( append_node(&__head_sll1, "sll1", 20) == 0 ) {
-        printf("Node added ...\n");
-    }
-    else {
-        exit(1);
-    }
-    //traverse_sll(__head_sll1);
-
-    if( append_node(&__head_sll1, "sll1", 30) == 0 ) {
-        printf("Node added ...\n");
-    }
-    else {
-        exit(1);
-    }
-    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
-    traverse_sll(__head_sll1, "sll1");
-    printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
-    printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
-    printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
-    printf("Does 40 exist ? : %d\n", list_contains(__head_sll1, 40));
-
-    if( insert_node_after_key(__head_sll1, "sll1", 20, 25) != 0 ) {
-        exit(1);
-    }
-    else {
-        printf("Node inserted ...\n");
-    }
-
-    if( insert_node_after_key(__head_sll1, "sll1", 30, 35) != 0 ) {
-        exit(1);
-    }
-    else {
-        printf("Node inserted ...\n");
-    }
-    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
-    traverse_sll(__head_sll1, "sll1");
-    printf("Does 25 exist ? : %d\n", list_contains(__head_sll1, 25));
-    printf("Does 35 exist ? : %d\n", list_contains(__head_sll1, 35));
-    printf("Does 45 exist ? : %d\n", list_contains(__head_sll1, 45));
-
-    /*
-    if( insert_node_after_key(__head_sll1, "sll1", 40, 45) != 0 ) {
-        exit(1);
-    }
-    else {
-        printf("Node inserted ...\n");
-    }
-    */
-
-    delete_node(&__head_sll1, "sll1", 20);
-    delete_node(&__head_sll1, "sll1", 30);
-    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
-    traverse_sll(__head_sll1, "sll1");
-    delete_node(&__head_sll1, "sll1", 10);
-    printf("Linked list sll1 has %lu nodes\n", ll_lenght(__head_sll1));
-    traverse_sll(__head_sll1, "sll1");
-    printf("Does 10 exist ? : %d\n", list_contains(__head_sll1, 10));
-    printf("Does 20 exist ? : %d\n", list_contains(__head_sll1, 20));
-    printf("Does 30 exist ? : %d\n", list_contains(__head_sll1, 30));
-
-    printf("\n\n");
-
-    // Create empty single linked list 2 (no elements/nodes yet)
-    node_s *__head_sll2 = NULL;
-
-    if( append_node(&__head_sll2, "sll2", 100) == 0 ) {
-        printf("Init node added ...\n");
-    }
-    else {
-        exit(1);
-    }
-
-    if( append_node(&__head_sll2, "sll2", 200) == 0 ) {
-        printf("Node added ...\n");
-    }
-    else {
-        exit(1);
-    }
-    traverse_sll(__head_sll2, "sll2");
-
-    return 0;
 }
