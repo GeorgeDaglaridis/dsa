@@ -151,6 +151,11 @@ int main(void) {
     }
     traverse_sll(__head_sll2, "sll2");
 
+    free(__head_sll1);
+    __head_sll1 = NULL;
+    free(__head_sll2);
+    __head_sll2 = NULL;
+
     return 0;
 }
 
