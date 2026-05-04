@@ -11,7 +11,7 @@
 #endif
 
 typedef enum {
-    LIST_OK = 0,
+    SUCCESS = 0,
     LIST_NOK = -1,
     LIST_EMPTY = -2,
     LIST_ALRD_INIT = -3,
@@ -40,26 +40,46 @@ list_s *list_create(void) {
     if(!ll) {
         return NULL;
     }
+    DEBUG_PRINT("List creation: ll->head: %p, ll->tail: %p, ll->size: %ld\n", ll->head, ll->tail, ll->size);
+    // DEBUG_PRINT("ll points to %p\n", ll);
+    // DEBUG_PRINT("address of ll->head %p\n", &(ll->head));
+    // DEBUG_PRINT("address of ll->tail %p\n", &(ll->tail));
+    // DEBUG_PRINT("address of ll->size %p\n", &(ll->size));
 
     return ll;
 }
 
-// Incomplete: Make sure you free all nodes first before you free
+// Make sure you free all nodes first before you free
 // the list container
 list_status list_destroy(list_s **ll) {
     // Defensive check: Do not trust the arguments 
     // user provides you. Check for all cases.
-    if (ll == NULL) {
-        return LIST_NOT_FREED;
-    }
-    else if (*ll == NULL) {
+    if( (ll == NULL) || (*ll == NULL) ) {
         return LIST_NOT_FREED;
     }
     else {
+        // Free each node first ...
+        node_s *cursor = (*ll)->head;
+        while(cursor != NULL) {
+
+            node_s *temp_next_node = cursor->next_node;
+            DEBUG_PRINT("Before freeing: address node cursor points to: %p\n", cursor);
+            free(cursor);
+            DEBUG_PRINT("After freeing: address node cursor points to: %p\n", cursor);
+            cursor = temp_next_node;
+        }
+        // Restore list to valid empty state
+        (*ll)->head = NULL;
+        (*ll)->tail = NULL;
+        (*ll)->size = 0;
+        // Then free the list container
+        //DEBUG_PRINT("Before freeing: (*ll)->head: %p, (*ll)->tail: %p, (*ll)->size: %ld\n", (*ll)->head, (*ll)->tail, (*ll)->size);
         free(*ll);
+        //DEBUG_PRINT("After freeing: (*ll)->head: %p, (*ll)->tail: %p, (*ll)->size: %ld\n", (*ll)->head, (*ll)->tail, (*ll)->size);
         *ll = NULL;
-        return 0;
+        //DEBUG_PRINT("(*ll)->head: %p, (*ll)->tail: %p, (*ll)->size: %ld\n", (*ll)->head, (*ll)->tail, (*ll)->size);
     }
+    return SUCCESS;
 }
 
 list_status insert_node(list_s *ll, int data) {
@@ -75,8 +95,7 @@ list_status insert_node(list_s *ll, int data) {
 
     if(ll->head == NULL) {
         ll->head = n;
-        ll->tail = n;
-        //(*ll)->tail->next_node = NULL;
+        ll->tail = n; // Consequently, (*ll)->tail->next_node = NULL;
 
         msg = "Init node";
         printf("%s created at address %p with data %d\n", msg, n, n->data);
@@ -94,7 +113,7 @@ list_status insert_node(list_s *ll, int data) {
     //(*ll)->tail->next_node = n->next_node;
     //(*ll)->head->next_node = (*ll)->tail;
 
-    return LIST_OK;
+    return SUCCESS;
 }
 
 size_t sll_length(list_s *ll) {
@@ -131,10 +150,10 @@ int main(void) {
 
     //sll_length(NULL);
 
-    //printf("Before freeing: address sll1 points to: %p\n", sll1);
+    DEBUG_PRINT("Before freeing: address linked list sll1 points to: %p\n", sll1);
     // The following format is called ternary expression
     (list_destroy(&sll1) == LIST_NOT_FREED) ? printf("List not freed ... !\n") : printf("List freed ... !\n");
-    //printf("After freeing: address sll1 points to: %p\n", sll1);
+    DEBUG_PRINT("After freeing: address linked list sll1 points to: %p\n", sll1);
     
     return 0;
 }
