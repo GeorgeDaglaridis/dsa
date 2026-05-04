@@ -61,6 +61,30 @@ list_status list_destroy(list_s **ll) {
     }
 }
 
+list_status insert_node(list_s **ll, int data) {
+
+    node_s *n = calloc(1, sizeof(*n));
+    if(!n) {
+        printf("Memory allocation failed!\n");
+        return LIST_ERR_ALLOC;
+    }
+    n->next_node = NULL;
+    n->data = data;
+
+    if((*ll)->head == NULL) {
+        (*ll)->head = n;
+    }
+
+    (*ll)->tail = n;
+    (*ll)->tail->next_node = n->next_node;
+    (*ll)->size++;
+
+    printf("Node created at address %p with data %d\n", n, n->data);
+    DEBUG_PRINT("ll->head: %p, ll->tail: %p, ll->tail->next_node: %p\n", (*ll)->head, (*ll)->tail, (*ll)->tail->next_node);
+
+    return LIST_OK;
+}
+
 size_t ll_length(list_s *ll) {
     return ll->size;
 }
@@ -69,9 +93,14 @@ int main(void) {
 
     list_s *sll1 = list_create();
     if(!sll1) {
-        printf("Memory allocation failed!\n");
+        printf("Llist memory allocation failed!\n");
         return LIST_ERR_ALLOC;
     }
+    printf("Initial Size of sll1: %ld\n", ll_length(sll1));
+
+    (insert_node(&sll1, 10) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
+    printf("Size of sll1: %ld\n", ll_length(sll1));
+    (insert_node(&sll1, 20) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
     printf("Size of sll1: %ld\n", ll_length(sll1));
 
     //printf("Before freeing: address sll1 points to: %p\n", sll1);
