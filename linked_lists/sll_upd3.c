@@ -82,7 +82,8 @@ list_status list_destroy(list_s **ll) {
     return SUCCESS;
 }
 
-list_status insert_node(list_s *ll, int data) {
+// Basically append node at the end
+list_status append_node(list_s *ll, int data) {
 
     node_s *n = calloc(1, sizeof(*n));
     if(!n) {
@@ -104,18 +105,57 @@ list_status insert_node(list_s *ll, int data) {
         ll->tail->next_node = n;
         ll->tail = n;
 
-        printf("%s created at address %p with data %d\n", msg, n, n->data);
+        printf("%s appended at address %p with data %d\n", msg, n, n->data);
     }
     ll->size++;
 
     DEBUG_PRINT("ll->head: %p, ll->tail: %p, ll->tail->next_node: %p\n", ll->head, ll->tail, ll->tail->next_node);
 
-    //(*ll)->tail->next_node = n->next_node;
-    //(*ll)->head->next_node = (*ll)->tail;
-
     return SUCCESS;
 }
 
+// There has to be at lease one node in order to use this function
+list_status insert_node_after_key(list_s *ll, int key, int data) {
+
+    if(ll->size == 0) {
+        return LIST_EMPTY;
+    }
+
+    node_s *k = NULL, *n = NULL;
+
+    for(k = ll->head; k != NULL;
+                       k = k->next_node) {
+
+        if(k->data == key) {
+            break;
+        }
+    }
+
+    if(!k) {
+        return LIST_KEY_NOT_FOUND;
+    }
+
+    n = malloc(sizeof(node_s));
+    if(!n) {
+        return LIST_ERR_ALLOC;
+    }
+    n->data = data;
+    
+    if (k == ll->tail) {
+        ll->tail->next_node = n;
+        ll->tail = n;
+    } 
+    else {
+        n->next_node = k->next_node;
+        k->next_node = n;
+    }
+    ll->size++;
+
+    printf("New node inserted after key %d at address %p with data %d\n", key, n, n->data);
+    DEBUG_PRINT("ll->head: %p, ll->tail: %p, ll->tail->next_node: %p\n", ll->head, ll->tail, ll->tail->next_node);
+
+    return SUCCESS;
+}
 size_t sll_length(list_s *ll) {
     if(!ll) {
         printf("NULL list!\n");
@@ -142,10 +182,57 @@ int main(void) {
     }
     printf("Initial Size of sll1: %ld\n", sll_length(sll1));
 
-    (insert_node(sll1, 10) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
-    (insert_node(sll1, 20) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
-    (insert_node(sll1, 30) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
+    list_status status = 0;
 
+    // status = insert_node_after_key(sll1, 20, 25);
+    // if(status == LIST_EMPTY) {
+    //     printf("Container list not initialized!\n");
+    //     exit(1);
+    // }
+    // else if(status == LIST_KEY_NOT_FOUND) {
+    //     printf("Insertion failed: Key was not found!\n");
+    //     exit(1);
+    // }
+    // else if(status == LIST_ERR_ALLOC) {
+    //     printf("Memory allocation of node failed!\n");
+    //     exit(1);
+    // }
+    // traverse_sll(sll1);
+
+    (append_node(sll1, 10) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
+    (append_node(sll1, 20) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
+    (append_node(sll1, 30) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
+
+    traverse_sll(sll1);
+
+    status = insert_node_after_key(sll1, 20, 25);
+    if(status == LIST_EMPTY) {
+        printf("Container list not initialized!\n");
+        exit(1);
+    }
+    else if(status == LIST_KEY_NOT_FOUND) {
+        printf("Insertion failed: Key was not found!\n");
+        exit(1);
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Memory allocation of node failed!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = insert_node_after_key(sll1, 30, 35);
+    if(status == LIST_EMPTY) {
+        printf("Container list not initialized!\n");
+        exit(1);
+    }
+    else if(status == LIST_KEY_NOT_FOUND) {
+        printf("Insertion failed: Key was not found!\n");
+        exit(1);
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Memory allocation of node failed!\n");
+        exit(1);
+    }
     traverse_sll(sll1);
 
     //sll_length(NULL);
