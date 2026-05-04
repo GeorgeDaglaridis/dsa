@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define DEBUG 1
+
+#if DEBUG
+    #define DEBUG_PRINT(...) printf(__VA_ARGS__)
+#else
+    #define DEBUG_PRINT(...)
+#endif
+
 typedef enum {
     LIST_OK = 0,
     LIST_EMPTY = -1,
@@ -53,6 +61,10 @@ list_status list_destroy(list_s **ll) {
     }
 }
 
+size_t ll_length(list_s *ll) {
+    return ll->size;
+}
+
 int main(void) {
 
     list_s *sll1 = list_create();
@@ -60,11 +72,12 @@ int main(void) {
         printf("Memory allocation failed!\n");
         return LIST_ERR_ALLOC;
     }
+    printf("Size of sll1: %ld\n", ll_length(sll1));
 
-    printf("Before freeing: address sll1 points to: %p\n", sll1);
+    //printf("Before freeing: address sll1 points to: %p\n", sll1);
     // The following format is called ternary expression
-    (list_destroy(&sll1) == LIST_NOT_FREED) ? printf("Not freed ... !\n") : printf("Freed ... !\n");
-    printf("After freeing: address sll1 points to: %p\n", sll1);
+    (list_destroy(&sll1) == LIST_NOT_FREED) ? printf("List not freed ... !\n") : printf("List freed ... !\n");
+    //printf("After freeing: address sll1 points to: %p\n", sll1);
     
     return 0;
 }
