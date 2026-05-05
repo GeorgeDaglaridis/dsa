@@ -35,6 +35,10 @@ typedef struct list {
     size_t size;
 } list_s;
 
+void print_list_details(list_s *ll, char *msg) {
+    DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, ll->tail->next_node: %p, size: %ld\n", msg, ll->head, ll->tail, ll->tail->next_node, ll->size);
+}
+
 list_s *list_create(void) {
     
     list_s *ll = calloc(1, sizeof(*ll));
@@ -42,11 +46,11 @@ list_s *list_create(void) {
         return NULL;
     }
     // Hence:
-    // ll->head = NULL
-    // ll->tail = NULL
-    // ll->tail->next = NULL
-    // ll->size = 0
-    DEBUG_PRINT("List creation: ll->head: %p, ll->tail: %p, ll->size: %ld\n", ll->head, ll->tail, ll->size);
+    // ll->head = NULL;
+    // ll->tail = NULL;
+    // ll->tail->next_node = NULL; // if printed results in an error since list has no nodes
+    // ll->size = 0;
+    printf("\nList creation: ll->head: %p, ll->tail: %p, size: %ld\n\n", ll->head, ll->tail, ll->size);
     // DEBUG_PRINT("ll points to %p\n", ll);
     // DEBUG_PRINT("address of ll->head %p\n", &(ll->head));
     // DEBUG_PRINT("address of ll->tail %p\n", &(ll->tail));
@@ -127,7 +131,7 @@ list_status append_node(list_s *ll, int data) {
     ll->tail->next_node = NULL; 
     ll->size++;
 
-    DEBUG_PRINT("ll->head: %p, ll->tail: %p, ll->tail->next_node: %p\n", ll->head, ll->tail, ll->tail->next_node);
+    print_list_details(ll, "Append node");
 
     return SUCCESS;
 }
@@ -176,8 +180,48 @@ list_status insert_node_after_key(list_s *ll, int key, int data) {
     ll->size++;
 
     printf("New node inserted after key %d at address %p with data %d\n", key, n, n->data);
-    DEBUG_PRINT("ll->head: %p, ll->tail: %p, ll->tail->next_node: %p\n", ll->head, ll->tail, ll->tail->next_node);
+    print_list_details(ll, "Insert node");
 
+    return SUCCESS;
+}
+
+// There has to be at least one node in order to use this function
+list_status delete_node(list_s *ll, int data) {
+
+    if(ll == NULL) {
+        return LIST_ERR_INVALID_ARG;
+    }
+    else if(ll->head == NULL) {
+        return LIST_EMPTY;
+    }
+
+    node_s *previour_cur = NULL, *current_cur = ll->head;
+    for(current_cur; current_cur != NULL; 
+                     previour_cur = current_cur, current_cur = current_cur->next_node) {
+        
+        if(current_cur->data == data) {
+            break;
+        }
+    }
+    
+    if(current_cur == ll->head) {
+        ll->head = current_cur->next_node;
+    }
+    else {
+        previour_cur->next_node = current_cur->next_node;
+    }
+    
+    if(current_cur == ll->tail) {        
+        ll->tail = previour_cur;
+        ll->tail->next_node = NULL;
+    }
+    printf("Node deletion: Node at address %p with data %d just deleted\n", current_cur, current_cur->data);
+    free(current_cur);
+    current_cur = NULL;
+    ll->size--;
+
+    print_list_details(ll, "Delete node");
+    
     return SUCCESS;
 }
 
@@ -205,7 +249,6 @@ int main(void) {
         printf("Llist memory allocation failed!\n");
         return LIST_ERR_ALLOC;
     }
-    printf("Initial Size of sll1: %ld\n", sll_length(sll1));
 
     list_status status = 0;
 
@@ -296,6 +339,13 @@ int main(void) {
         printf("Memory allocation of node failed!\n");
         exit(1);
     }
+    traverse_sll(sll1);
+
+    delete_node(sll1, 20);
+    traverse_sll(sll1);
+    delete_node(sll1, 10);
+    traverse_sll(sll1);
+    delete_node(sll1, 35);
     traverse_sll(sll1);
 
     //sll_length(NULL);
