@@ -134,7 +134,10 @@ list_status append_node(list_s *ll, int data) {
 // There has to be at least one node in order to use this function
 list_status insert_node_after_key(list_s *ll, int key, int data) {
 
-    if( (ll == NULL) || (ll->head == NULL) ) {
+    if(ll == NULL) {
+        return LIST_ERR_INVALID_ARG;
+    }
+    else if(ll->head == NULL) {
         return LIST_EMPTY;
     }
 
@@ -152,21 +155,23 @@ list_status insert_node_after_key(list_s *ll, int key, int data) {
         return LIST_KEY_NOT_FOUND;
     }
 
-    n = malloc(sizeof(node_s));
+    n = malloc(sizeof(*n));
     if(!n) {
         return LIST_ERR_ALLOC;
     }
-    n->next_node = NULL;
+    //n->next_node = NULL;
     n->data = data;
+
+    // General handling
+    n->next_node = k->next_node;
+    k->next_node = n;
     
-    if (k == ll->tail) {
-        ll->tail->next_node = n;
+    // Special handling
+    if(k == ll->tail) {
         ll->tail = n;
+        // Redunndant since you assigned n->next_node = NULL; before
+        //ll->tail->next_node = NULL;
     } 
-    else {
-        n->next_node = k->next_node;
-        k->next_node = n;
-    }
     ll->size++;
 
     printf("New node inserted after key %d at address %p with data %d\n", key, n, n->data);
@@ -253,7 +258,12 @@ int main(void) {
     traverse_sll(sll1);    
 
     status = insert_node_after_key(sll1, 20, 25);
-    if(status == LIST_EMPTY) {
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_EMPTY) {
         printf("Container list not initialized!\n");
         exit(1);
     }
@@ -268,7 +278,12 @@ int main(void) {
     traverse_sll(sll1);
 
     status = insert_node_after_key(sll1, 30, 35);
-    if(status == LIST_EMPTY) {
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_EMPTY) {
         printf("Container list not initialized!\n");
         exit(1);
     }
