@@ -18,7 +18,8 @@ typedef enum {
     LIST_ERR_ALLOC = -4,
     LIST_INV_DATA = -5,
     LIST_KEY_NOT_FOUND = -6,
-    LIST_NOT_FREED = -7
+    LIST_NOT_FREED = -7,
+    LIST_ERR_INVALID_ARG = -8
 } list_status;
 
 // Represents each node of the linked list
@@ -40,6 +41,11 @@ list_s *list_create(void) {
     if(!ll) {
         return NULL;
     }
+    // Hence:
+    // ll->head = NULL
+    // ll->tail = NULL
+    // ll->tail->next = NULL
+    // ll->size = 0
     DEBUG_PRINT("List creation: ll->head: %p, ll->tail: %p, ll->size: %ld\n", ll->head, ll->tail, ll->size);
     // DEBUG_PRINT("ll points to %p\n", ll);
     // DEBUG_PRINT("address of ll->head %p\n", &(ll->head));
@@ -85,6 +91,12 @@ list_status list_destroy(list_s **ll) {
 // Basically append node at the end
 list_status append_node(list_s *ll, int data) {
 
+    // Defensive check: Do not trust the arguments 
+    // user provides you. Check for all cases.
+    if(ll == NULL) { // List does not exist
+        return LIST_ERR_INVALID_ARG;
+    }
+
     node_s *n = calloc(1, sizeof(*n));
     if(!n) {
         return LIST_ERR_ALLOC;
@@ -102,11 +114,16 @@ list_status append_node(list_s *ll, int data) {
         printf("%s created at address %p with data %d\n", msg, n, n->data);
 
     } else {
+        // Connect old tail to the new node
         ll->tail->next_node = n;
+        // Update tail with the new node
         ll->tail = n;
 
         printf("%s appended at address %p with data %d\n", msg, n, n->data);
     }
+    // More clear but maybe not needed since n->next = NULL from above 
+    // and now tail has been updating pointing to the last created and added node 
+    ll->tail->next_node = NULL; 
     ll->size++;
 
     DEBUG_PRINT("ll->head: %p, ll->tail: %p, ll->tail->next_node: %p\n", ll->head, ll->tail, ll->tail->next_node);
@@ -114,17 +131,17 @@ list_status append_node(list_s *ll, int data) {
     return SUCCESS;
 }
 
-// There has to be at lease one node in order to use this function
+// There has to be at least one node in order to use this function
 list_status insert_node_after_key(list_s *ll, int key, int data) {
 
-    if(ll->size == 0) {
+    if( (ll == NULL) || (ll->head == NULL) ) {
         return LIST_EMPTY;
     }
 
     node_s *k = NULL, *n = NULL;
 
     for(k = ll->head; k != NULL;
-                       k = k->next_node) {
+                      k = k->next_node) {
 
         if(k->data == key) {
             break;
@@ -139,6 +156,7 @@ list_status insert_node_after_key(list_s *ll, int key, int data) {
     if(!n) {
         return LIST_ERR_ALLOC;
     }
+    n->next_node = NULL;
     n->data = data;
     
     if (k == ll->tail) {
@@ -156,6 +174,7 @@ list_status insert_node_after_key(list_s *ll, int key, int data) {
 
     return SUCCESS;
 }
+
 size_t sll_length(list_s *ll) {
     if(!ll) {
         printf("NULL list!\n");
@@ -199,11 +218,39 @@ int main(void) {
     // }
     // traverse_sll(sll1);
 
-    (append_node(sll1, 10) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
-    (append_node(sll1, 20) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
-    (append_node(sll1, 30) == LIST_ERR_ALLOC) ? printf("Node memory allocation failed!\n") : printf("");
+    status = append_node(sll1, 10);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
 
-    traverse_sll(sll1);
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Node memory allocation failed!\n");
+        exit(1);
+    }
+    
+    status = append_node(sll1, 20);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Node memory allocation failed!\n");
+        exit(1);
+    }
+
+    status = append_node(sll1, 30);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Node memory allocation failed!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);    
 
     status = insert_node_after_key(sll1, 20, 25);
     if(status == LIST_EMPTY) {
