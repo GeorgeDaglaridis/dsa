@@ -71,6 +71,7 @@ list_status list_destroy(list_s **ll) {
             node_s *temp_next_node = cursor->next_node;
             DEBUG_PRINT("Before freeing: address node cursor points to: %p\n", cursor);
             free(cursor);
+            cursor = NULL;
             DEBUG_PRINT("After freeing: address node cursor points to: %p\n", cursor);
             cursor = temp_next_node;
         }
