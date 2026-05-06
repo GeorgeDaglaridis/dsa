@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+// gcc -DDEBUG=1 sll_upd3.c -o sll_upd3
 #define DEBUG 1
 
 #if DEBUG
@@ -41,9 +42,9 @@ list_status list_destroy(list_s **ll);
 list_status append_node(list_s *ll, int data);
 list_status insert_node_after_key(list_s *ll, int key, int data);
 list_status delete_node(list_s *ll, int data);
-size_t sll_length(list_s *ll);
-void traverse_sll(list_s *ll);
-void print_list_details(list_s *ll, char *msg);
+size_t sll_length(const list_s *ll);
+void traverse_sll(const list_s *ll);
+void print_list_details(const list_s *ll, const char *msg);
 
 int main(void) {
 
@@ -378,7 +379,7 @@ list_status insert_node_after_key(list_s *ll, int key, int data) {
         return LIST_KEY_NOT_FOUND;
     }
 
-    n = malloc(sizeof(*n));
+    n = calloc(1, sizeof(*n));
     if(!n) {
         return LIST_ERR_ALLOC;
     }
@@ -413,29 +414,29 @@ list_status delete_node(list_s *ll, int data) {
         return LIST_EMPTY;
     }
 
-    node_s *previous_cur, *current_cur;
-    for(previous_cur = NULL, current_cur = ll->head;
-                             current_cur != NULL;
-                             previous_cur = current_cur, current_cur = current_cur->next_node) {
+    node_s *prev, *curr;
+    for(prev = NULL, curr = ll->head;
+                             curr != NULL;
+                             prev = curr, curr = curr->next_node) {
         
-        if(current_cur->data == data) {
+        if(curr->data == data) {
             break;
         }
     }
 
-    if(!current_cur) {
+    if(!curr) {
         return LIST_INV_DATA;
     }
     
-    if(current_cur == ll->head) {
-        ll->head = current_cur->next_node;
+    if(curr == ll->head) {
+        ll->head = curr->next_node;
     }
     else {
-        previous_cur->next_node = current_cur->next_node;
+        prev->next_node = curr->next_node;
     }
     
-    if(current_cur == ll->tail) {        
-        ll->tail = previous_cur;
+    if(curr == ll->tail) {        
+        ll->tail = prev;
 
         // In case list has only the init node
         // and we want to delete it
@@ -443,9 +444,9 @@ list_status delete_node(list_s *ll, int data) {
             ll->tail->next_node = NULL;
         }
     }
-    printf("Node deletion: Node at address %p with data %d just deleted\n", current_cur, current_cur->data);
-    free(current_cur);
-    current_cur = NULL;
+    printf("Node deletion: Node at address %p with data %d just deleted\n", curr, curr->data);
+    free(curr);
+    curr = NULL;
     ll->size--;
 
     print_list_details(ll, "Delete node");
@@ -453,7 +454,7 @@ list_status delete_node(list_s *ll, int data) {
     return SUCCESS;
 }
 
-size_t sll_length(list_s *ll) {
+size_t sll_length(const list_s *ll) {
     if(!ll) {
         printf("NULL list!\n");
         return 0;
@@ -461,7 +462,7 @@ size_t sll_length(list_s *ll) {
     return ll->size;
 }
 
-void traverse_sll(list_s *ll) {
+void traverse_sll(const list_s *ll) {
     printf("Linked list sll1 has %ld nodes \n", sll_length(ll));
 
     size_t i = 0;
@@ -470,7 +471,7 @@ void traverse_sll(list_s *ll) {
     }
 }
 
-void print_list_details(list_s *ll, char *msg) {
+void print_list_details(const list_s *ll, const char *msg) {
     if( (ll->head == NULL) || (ll->tail == NULL)) {
         DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, size: %ld\n", msg, ll->head, ll->tail, ll->size);
     }
