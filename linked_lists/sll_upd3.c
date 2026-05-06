@@ -220,7 +220,7 @@ list_status list_destroy(list_s **ll) {
             node_s *temp_next_node = cursor->next_node;
             DEBUG_PRINT("Before freeing: address node cursor points to: %p\n", cursor);
             free(cursor);
-            cursor = NULL;
+            //cursor = NULL; redundant since it gets overwritten immediately below
             DEBUG_PRINT("After freeing: address node cursor points to: %p\n", cursor);
             cursor = temp_next_node;
         }
@@ -232,7 +232,7 @@ list_status list_destroy(list_s **ll) {
         //DEBUG_PRINT("Before freeing: (*ll)->head: %p, (*ll)->tail: %p, (*ll)->size: %ld\n", (*ll)->head, (*ll)->tail, (*ll)->size);
         free(*ll);
         //DEBUG_PRINT("After freeing: (*ll)->head: %p, (*ll)->tail: %p, (*ll)->size: %ld\n", (*ll)->head, (*ll)->tail, (*ll)->size);
-        *ll = NULL;
+        *ll = NULL; // This way you modify the caller's pointer
         //DEBUG_PRINT("(*ll)->head: %p, (*ll)->tail: %p, (*ll)->size: %ld\n", (*ll)->head, (*ll)->tail, (*ll)->size);
     }
     return SUCCESS;
