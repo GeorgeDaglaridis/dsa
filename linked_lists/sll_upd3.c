@@ -36,7 +36,12 @@ typedef struct list {
 } list_s;
 
 void print_list_details(list_s *ll, char *msg) {
-    DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, ll->tail->next_node: %p, size: %ld\n", msg, ll->head, ll->tail, ll->tail->next_node, ll->size);
+    if( (ll->head == NULL) || (ll->tail == NULL)) {
+        DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, size: %ld\n", msg, ll->head, ll->tail, ll->size);
+    }
+    else {
+        DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, ll->tail->next_node: %p, size: %ld\n", msg, ll->head, ll->tail, ll->tail->next_node, ll->size);
+    }
 }
 
 list_s *list_create(void) {
@@ -191,29 +196,39 @@ list_status delete_node(list_s *ll, int data) {
     if(ll == NULL) {
         return LIST_ERR_INVALID_ARG;
     }
-    else if(ll->head == NULL) {
+    if(ll->head == NULL) {
         return LIST_EMPTY;
     }
 
-    node_s *previour_cur = NULL, *current_cur = ll->head;
-    for(current_cur; current_cur != NULL; 
-                     previour_cur = current_cur, current_cur = current_cur->next_node) {
+    node_s *previous_cur, *current_cur;
+    for(previous_cur = NULL, current_cur = ll->head;
+                             current_cur != NULL;
+                             previous_cur = current_cur, current_cur = current_cur->next_node) {
         
         if(current_cur->data == data) {
             break;
         }
+    }
+
+    if(!current_cur) {
+        return LIST_INV_DATA;
     }
     
     if(current_cur == ll->head) {
         ll->head = current_cur->next_node;
     }
     else {
-        previour_cur->next_node = current_cur->next_node;
+        previous_cur->next_node = current_cur->next_node;
     }
     
     if(current_cur == ll->tail) {        
-        ll->tail = previour_cur;
-        ll->tail->next_node = NULL;
+        ll->tail = previous_cur;
+
+        // In case list has only the init node
+        // and we want to delete it
+        if(ll->tail != NULL) {
+            ll->tail->next_node = NULL;
+        }
     }
     printf("Node deletion: Node at address %p with data %d just deleted\n", current_cur, current_cur->data);
     free(current_cur);
@@ -277,6 +292,9 @@ int main(void) {
         printf("Node memory allocation failed!\n");
         exit(1);
     }
+
+    delete_node(sll1, 10);
+    traverse_sll(sll1);
     
     status = append_node(sll1, 20);
     if(status == LIST_ERR_INVALID_ARG) {
@@ -308,7 +326,7 @@ int main(void) {
 
     }
     else if(status == LIST_EMPTY) {
-        printf("Container list not initialized!\n");
+        printf("Container list is empty!\n");
         exit(1);
     }
     else if(status == LIST_KEY_NOT_FOUND) {
@@ -341,12 +359,105 @@ int main(void) {
     }
     traverse_sll(sll1);
 
-    delete_node(sll1, 20);
+    status = delete_node(sll1, 20);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
     traverse_sll(sll1);
-    delete_node(sll1, 10);
+
+    /*
+    // The following lines will return "Data provided not found!",
+    // since you try to remove data that cannot be found in your
+    // list since you removed them earlier!!!
+    status = delete_node(sll1, 10);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
     traverse_sll(sll1);
-    delete_node(sll1, 35);
+    */
+
+    status = delete_node(sll1, 35);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
     traverse_sll(sll1);
+
+    /*
+    // The following lines will return "Container list is empty!", eventually,
+    // since once you have deleted 25 and 30 and the list is empty
+    // you try to remove data again !!!
+    status = delete_node(sll1, 25);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = delete_node(sll1, 30);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = delete_node(sll1, 10);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+    */
 
     //sll_length(NULL);
 
