@@ -383,7 +383,7 @@ list_status delete_node(list_s *ll, int data) {
 size_t sll_length(const list_s *ll) {
     if(!ll) {
         printf("NULL list!\n");
-        return 0;
+        return 0; // returning 0 is wrong but along with the msg before we shall understand
     }
     return ll->size;
 }
@@ -408,16 +408,17 @@ void print_list_details(const list_s *ll, const char *msg) {
 
 void handle_error(list_status status) {
     switch(status) {
+        // Fail fast approach. Strict API
         case LIST_ERR_INVALID_ARG:
-            printf("NULL: Invalid argument provided!\n");
+            fprintf(stderr, "NULL: Invalid argument provided!\n");
             break;
         
         case LIST_ERR_ALLOC:
-            printf("Memory allocation of node failed!\n");
+            fprintf(stderr, "Memory allocation of node failed!\n");
             break;
         
         case LIST_EMPTY:
-            printf("Container list is empty!\n");
+            fprintf(stderr, "Container list is empty!\n");
             break;
     }
 
