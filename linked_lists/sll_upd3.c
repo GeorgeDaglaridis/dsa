@@ -35,13 +35,226 @@ typedef struct list {
     size_t size;
 } list_s;
 
-void print_list_details(list_s *ll, char *msg) {
-    if( (ll->head == NULL) || (ll->tail == NULL)) {
-        DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, size: %ld\n", msg, ll->head, ll->tail, ll->size);
+// Function prototypes/declarations
+list_s *list_create(void);
+list_status list_destroy(list_s **ll);
+list_status append_node(list_s *ll, int data);
+list_status insert_node_after_key(list_s *ll, int key, int data);
+list_status delete_node(list_s *ll, int data);
+size_t sll_length(list_s *ll);
+void traverse_sll(list_s *ll);
+void print_list_details(list_s *ll, char *msg);
+
+int main(void) {
+
+    list_s *sll1 = list_create();
+    if(!sll1) {
+        printf("Llist memory allocation failed!\n");
+        return LIST_ERR_ALLOC;
     }
-    else {
-        DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, ll->tail->next_node: %p, size: %ld\n", msg, ll->head, ll->tail, ll->tail->next_node, ll->size);
+
+    list_status status = 0;
+
+    // status = insert_node_after_key(sll1, 20, 25);
+    // if(status == LIST_EMPTY) {
+    //     printf("Container list not initialized!\n");
+    //     exit(1);
+    // }
+    // else if(status == LIST_KEY_NOT_FOUND) {
+    //     printf("Insertion failed: Key was not found!\n");
+    //     exit(1);
+    // }
+    // else if(status == LIST_ERR_ALLOC) {
+    //     printf("Memory allocation of node failed!\n");
+    //     exit(1);
+    // }
+    // traverse_sll(sll1);
+
+    status = append_node(sll1, 10);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
     }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Node memory allocation failed!\n");
+        exit(1);
+    }
+
+    delete_node(sll1, 10);
+    traverse_sll(sll1);
+    
+    status = append_node(sll1, 20);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Node memory allocation failed!\n");
+        exit(1);
+    }
+
+    status = append_node(sll1, 30);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Node memory allocation failed!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);    
+
+    status = insert_node_after_key(sll1, 20, 25);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_KEY_NOT_FOUND) {
+        printf("Insertion failed: Key was not found!\n");
+        exit(1);
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Memory allocation of node failed!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = insert_node_after_key(sll1, 30, 35);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("Invalid argument provided!\n");
+        exit(1);
+
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list not initialized!\n");
+        exit(1);
+    }
+    else if(status == LIST_KEY_NOT_FOUND) {
+        printf("Insertion failed: Key was not found!\n");
+        exit(1);
+    }
+    else if(status == LIST_ERR_ALLOC) {
+        printf("Memory allocation of node failed!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = delete_node(sll1, 20);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    /*
+    // The following lines will return "Data provided not found!",
+    // since you try to remove data that cannot be found in your
+    // list since you removed them earlier!!!
+    status = delete_node(sll1, 10);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+    */
+
+    status = delete_node(sll1, 35);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    /*
+    // The following lines will return "Container list is empty!", eventually,
+    // since once you have deleted 25 and 30 and the list is empty
+    // you try to remove data again !!!
+    status = delete_node(sll1, 25);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = delete_node(sll1, 30);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+
+    status = delete_node(sll1, 10);
+    if(status == LIST_ERR_INVALID_ARG) {
+        printf("NULL: Invalid argument provided!\n");
+        exit(1);
+    }
+    else if(status == LIST_EMPTY) {
+        printf("Container list is empty!\n");
+        exit(1);
+    }
+    else if(status == LIST_INV_DATA) {
+        printf("Data provided not found!\n");
+        exit(1);
+    }
+    traverse_sll(sll1);
+    */
+
+    //sll_length(NULL);
+
+    DEBUG_PRINT("Before freeing: address linked list sll1 points to: %p\n", sll1);
+    // The following format is called ternary expression
+    (list_destroy(&sll1) == LIST_NOT_FREED) ? printf("List not freed ... !\n") : printf("List freed ... !\n");
+    DEBUG_PRINT("After freeing: address linked list sll1 points to: %p\n", sll1);
+    
+    return 0;
 }
 
 list_s *list_create(void) {
@@ -257,215 +470,11 @@ void traverse_sll(list_s *ll) {
     }
 }
 
-int main(void) {
-
-    list_s *sll1 = list_create();
-    if(!sll1) {
-        printf("Llist memory allocation failed!\n");
-        return LIST_ERR_ALLOC;
+void print_list_details(list_s *ll, char *msg) {
+    if( (ll->head == NULL) || (ll->tail == NULL)) {
+        DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, size: %ld\n", msg, ll->head, ll->tail, ll->size);
     }
-
-    list_status status = 0;
-
-    // status = insert_node_after_key(sll1, 20, 25);
-    // if(status == LIST_EMPTY) {
-    //     printf("Container list not initialized!\n");
-    //     exit(1);
-    // }
-    // else if(status == LIST_KEY_NOT_FOUND) {
-    //     printf("Insertion failed: Key was not found!\n");
-    //     exit(1);
-    // }
-    // else if(status == LIST_ERR_ALLOC) {
-    //     printf("Memory allocation of node failed!\n");
-    //     exit(1);
-    // }
-    // traverse_sll(sll1);
-
-    status = append_node(sll1, 10);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("Invalid argument provided!\n");
-        exit(1);
-
+    else {
+        DEBUG_PRINT("%s: ll->head: %p, ll->tail: %p, ll->tail->next_node: %p, size: %ld\n", msg, ll->head, ll->tail, ll->tail->next_node, ll->size);
     }
-    else if(status == LIST_ERR_ALLOC) {
-        printf("Node memory allocation failed!\n");
-        exit(1);
-    }
-
-    delete_node(sll1, 10);
-    traverse_sll(sll1);
-    
-    status = append_node(sll1, 20);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("Invalid argument provided!\n");
-        exit(1);
-
-    }
-    else if(status == LIST_ERR_ALLOC) {
-        printf("Node memory allocation failed!\n");
-        exit(1);
-    }
-
-    status = append_node(sll1, 30);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("Invalid argument provided!\n");
-        exit(1);
-
-    }
-    else if(status == LIST_ERR_ALLOC) {
-        printf("Node memory allocation failed!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);    
-
-    status = insert_node_after_key(sll1, 20, 25);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("Invalid argument provided!\n");
-        exit(1);
-
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_KEY_NOT_FOUND) {
-        printf("Insertion failed: Key was not found!\n");
-        exit(1);
-    }
-    else if(status == LIST_ERR_ALLOC) {
-        printf("Memory allocation of node failed!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-
-    status = insert_node_after_key(sll1, 30, 35);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("Invalid argument provided!\n");
-        exit(1);
-
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list not initialized!\n");
-        exit(1);
-    }
-    else if(status == LIST_KEY_NOT_FOUND) {
-        printf("Insertion failed: Key was not found!\n");
-        exit(1);
-    }
-    else if(status == LIST_ERR_ALLOC) {
-        printf("Memory allocation of node failed!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-
-    status = delete_node(sll1, 20);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("NULL: Invalid argument provided\n");
-        exit(1);
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_INV_DATA) {
-        printf("Data provided not found!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-
-    /*
-    // The following lines will return "Data provided not found!",
-    // since you try to remove data that cannot be found in your
-    // list since you removed them earlier!!!
-    status = delete_node(sll1, 10);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("NULL: Invalid argument provided\n");
-        exit(1);
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_INV_DATA) {
-        printf("Data provided not found!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-    */
-
-    status = delete_node(sll1, 35);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("NULL: Invalid argument provided!\n");
-        exit(1);
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_INV_DATA) {
-        printf("Data provided not found!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-
-    /*
-    // The following lines will return "Container list is empty!", eventually,
-    // since once you have deleted 25 and 30 and the list is empty
-    // you try to remove data again !!!
-    status = delete_node(sll1, 25);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("NULL: Invalid argument provided!\n");
-        exit(1);
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_INV_DATA) {
-        printf("Data provided not found!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-
-    status = delete_node(sll1, 30);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("NULL: Invalid argument provided!\n");
-        exit(1);
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_INV_DATA) {
-        printf("Data provided not found!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-
-    status = delete_node(sll1, 10);
-    if(status == LIST_ERR_INVALID_ARG) {
-        printf("NULL: Invalid argument provided!\n");
-        exit(1);
-    }
-    else if(status == LIST_EMPTY) {
-        printf("Container list is empty!\n");
-        exit(1);
-    }
-    else if(status == LIST_INV_DATA) {
-        printf("Data provided not found!\n");
-        exit(1);
-    }
-    traverse_sll(sll1);
-    */
-
-    //sll_length(NULL);
-
-    DEBUG_PRINT("Before freeing: address linked list sll1 points to: %p\n", sll1);
-    // The following format is called ternary expression
-    (list_destroy(&sll1) == LIST_NOT_FREED) ? printf("List not freed ... !\n") : printf("List freed ... !\n");
-    DEBUG_PRINT("After freeing: address linked list sll1 points to: %p\n", sll1);
-    
-    return 0;
 }
-
