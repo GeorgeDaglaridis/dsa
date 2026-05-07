@@ -53,7 +53,7 @@ int main(void) {
     list_s *sll1 = list_create();
     if(!sll1) {
         printf("Llist memory allocation failed!\n");
-        return LIST_ERR_ALLOC;
+        return EXIT_FAILURE;
     }
 
     list_status status = 0;
@@ -420,6 +420,8 @@ void handle_error(list_status status) {
         case LIST_EMPTY:
             fprintf(stderr, "Container list is empty!\n");
             break;
+        default:
+            break;
     }
 
     exit(EXIT_FAILURE);
@@ -433,6 +435,8 @@ void log_error(list_status status) {
         
         case LIST_INV_DATA:
             printf("Data provided not found!\n");
+            break;
+        default:
             break;
     }
 }
