@@ -217,7 +217,7 @@ list_status insert_node_after_key(node_s *sll_head, char *ll_name, int key, int 
         return LIST_KEY_NOT_FOUND;
     }
 
-    n = malloc(sizeof(node_s));
+    n = malloc(sizeof(*n));
     if(!n) {
         printf("Memory allocation of node failed!\n");
         return LIST_ERR_ALLOC;
