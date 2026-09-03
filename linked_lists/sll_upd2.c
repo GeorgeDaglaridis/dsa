@@ -165,7 +165,7 @@ list_status append_node(node_s **sll_head, char *ll_name, int data) {
     // if __head_sll1 is NULL, list is empty so needs to be init it once!
     if(!(*sll_head)) {
 
-        *sll_head = malloc(sizeof(node_s));
+        *sll_head = malloc(sizeof(**sll_head)); //same as malloc(sizeof(node_s));
         if(!(*sll_head)) {
             printf("Memory allocation of init node failed!\n");
             return LIST_ERR_ALLOC;
@@ -179,7 +179,7 @@ list_status append_node(node_s **sll_head, char *ll_name, int data) {
     }
 
     // Create and connect new node with the previous one
-    node_s *n = malloc(sizeof(node_s));
+    node_s *n = malloc(sizeof(*n)); // same as malloc(sizeof(node_s))
     if(!n) {
         printf("Memory allocation of node failed!\n");
         return LIST_ERR_ALLOC;
