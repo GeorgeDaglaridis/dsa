@@ -45,29 +45,29 @@ sll_status sll_destroy(sll_t **list) {
     if( (list == NULL) || (*list == NULL) ) {
         return SLL_NOT_FREED;
     }
-    else {
-        // Free each node first ...
-        node_s *cursor = (*list)->head;
-        while(cursor != NULL) {
 
-            node_s *temp_next_node = cursor->next_node;
-            DEBUG_PRINT("Before freeing: address node cursor points to: %p\n", cursor);
-            free(cursor);
-            //cursor = NULL; redundant since it gets overwritten immediately below
-            DEBUG_PRINT("After freeing: address node cursor points to: %p\n", cursor);
-            cursor = temp_next_node;
-        }
-        // Restore list to valid empty state
-        (*list)->head = NULL;
-        (*list)->tail = NULL;
-        (*list)->size = 0;
-        // Then free the list container
-        //DEBUG_PRINT("Before freeing: (*list)->head: %p, (*list)->tail: %p, (*list)->size: %ld\n", (*list)->head, (*list)->tail, (*list)->size);
-        free(*list);
-        //DEBUG_PRINT("After freeing: (*list)->head: %p, (*list)->tail: %p, (*list)->size: %ld\n", (*list)->head, (*list)->tail, (*list)->size);
-        *list = NULL; // This way you modify the caller's pointer
-        //DEBUG_PRINT("(*list)->head: %p, (*list)->tail: %p, (*list)->size: %ld\n", (*list)->head, (*list)->tail, (*list)->size);
+    // Free each node first ...
+    node_s *cursor = (*list)->head;
+    while(cursor != NULL) {
+
+        node_s *temp_next_node = cursor->next_node;
+        DEBUG_PRINT("Before freeing: address node cursor points to: %p\n", cursor);
+        free(cursor);
+        //cursor = NULL; redundant since it gets overwritten immediately below
+        DEBUG_PRINT("After freeing: address node cursor points to: %p\n", cursor);
+        cursor = temp_next_node;
     }
+    // Restore list to valid empty state
+    (*list)->head = NULL;
+    (*list)->tail = NULL;
+    (*list)->size = 0;
+    // Then free the list container
+    //DEBUG_PRINT("Before freeing: (*list)->head: %p, (*list)->tail: %p, (*list)->size: %ld\n", (*list)->head, (*list)->tail, (*list)->size);
+    free(*list);
+    //DEBUG_PRINT("After freeing: (*list)->head: %p, (*list)->tail: %p, (*list)->size: %ld\n", (*list)->head, (*list)->tail, (*list)->size);
+    *list = NULL; // This way you modify the caller's pointer
+    //DEBUG_PRINT("(*list)->head: %p, (*list)->tail: %p, (*list)->size: %ld\n", (*list)->head, (*list)->tail, (*list)->size);
+    
     return SLL_SUCCESS;
 }
 
