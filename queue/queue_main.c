@@ -10,8 +10,12 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
+    enqueue(&q1, 10);
+    enqueue(&q1, 20);
+    enqueue(&q1, 30);
+
     free(q1);
     q1=NULL;    
     
-    return 0;
+    return EXIT_SUCCESS;
 }
