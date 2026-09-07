@@ -20,8 +20,13 @@ struct queue {
     unsigned int size;
 };
 
-void print_queue_details(const queue_s *q) {
-    DEBUG_PRINT("Queue details:: q->head: %p, q->tail: %p, q->size: %u \n", q->head, q->tail, q->size);
+// Helper functions
+static void print_queue_details(const queue_s *q) {
+    DEBUG_PRINT("Queue details:: address: %p, q->head: %p, q->tail: %p, q->size: %u \n", q, q->head, q->tail, q->size);
+}
+
+static void print_nodes(const node_s *n, const size_t node_index, const int node_data, const char *msg) {
+    printf("%s[%ld] = %d at address %p\n", msg, node_index, node_data, n);  
 }
 
 queue_s *queue_create() {
@@ -29,13 +34,13 @@ queue_s *queue_create() {
     if(!q) {
         return NULL;
     }
-    printf("Queue creation at address %p // ", q);
+    printf("Queue creation // ");
     print_queue_details(q);
 
     return q;
 }
 
-int enqueue(queue_s **q, int data) {
+int queue_enqueue(queue_s **q, int data) {
     // Wrong argument or Queue never created
     if((q == NULL)  || (*q == NULL)) {
       return QUEUE_ERR_INVALID_ARG;  
@@ -48,9 +53,9 @@ int enqueue(queue_s **q, int data) {
     n->next_node = NULL; // use malloc to explicitly set next_node to NULL or calloc which does it automatically
     n->data = data;
 
-    const char *msg = "Enqueue new node";
+    const char *msg = "Enqueue New Node";
     if((*q)->head == NULL) {
-        msg = "Enqueue init node";
+        msg = "Enqueue Init Node";
         (*q)->head = n;
         (*q)->tail = n;
     }
@@ -62,8 +67,23 @@ int enqueue(queue_s **q, int data) {
     }      
     (*q)->size++;
 
-    printf("%s %u: at address %p with data = %d\n", msg, (*q)->size, n, n->data);
     print_queue_details(*q);
+    print_nodes(n, (*q)->size, n->data, msg);
+    // printf("%s %u: at address %p with data = %d\n", msg, (*q)->size, n, n->data);
+        
+    return QUEUE_OK;
+}
+
+int queue_traverse(const queue_s *q) {
+    if(q == NULL){
+        return QUEUE_ERR_INVALID_ARG;
+    }
+    print_queue_details(q);
+    
+    size_t count = 0;
+    for(const node_s *cursor = q->head; cursor != NULL; cursor = cursor->next_node) {
+        print_nodes(cursor, count++, cursor->data, "Node");
+    }
 
     return QUEUE_OK;
 }

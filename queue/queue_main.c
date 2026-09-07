@@ -10,9 +10,13 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    enqueue(&q1, 10);
-    enqueue(&q1, 20);
-    enqueue(&q1, 30);
+    printf("\n");
+    queue_enqueue(&q1, 10);
+    queue_enqueue(&q1, 20);
+    queue_enqueue(&q1, 30);
+    queue_enqueue(&q1, 40);
+    printf("\n");
+    queue_traverse(q1);
 
     free(q1);
     q1=NULL;    

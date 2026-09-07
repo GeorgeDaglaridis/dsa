@@ -12,8 +12,7 @@
 typedef enum {
     QUEUE_OK = 0,
     QUEUE_ERR_ALLOC = -1,
-    QUEUE_ERR_INVALID_ARG = -2
-
+    QUEUE_ERR_INVALID_ARG = -2,
 } queue_status;
 
 /**
@@ -54,7 +53,21 @@ queue_s *queue_create();
  *         QUEUE_ERR_ALLOC if new node's allocation failed,
  *         QUEUE_OK on success.
  */
-int enqueue(queue_s **q, int data);
+int queue_enqueue(queue_s **q, int data);
+
+/**
+ * @brief Print the queue's internal details, then each node's data in 
+ *        head-to-tail order.
+ * 
+ * @param q Queue to traverse. May be NULL.
+ * 
+ * @return QUEUE_ERR_INVALID_ARG if @p q is NULL, 
+ *         QUEUE_OK on success (an empty queue is not an error: only the queue
+ *         details are printed and not "Node" lines follow).
+ * 
+ * @note Read-only: does not modity @p q or any node it points to.
+ */
+int queue_traverse(const queue_s *q);
 
 
 #endif // end of header file
