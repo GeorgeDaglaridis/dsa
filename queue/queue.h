@@ -16,14 +16,44 @@ typedef enum {
 
 } queue_status;
 
-// Do not expose the elements/members of
-// these structures to the user.
-typedef struct queue queue_s;
-typedef struct node node_s;
+/**
+ * @brief Opaque handle of a FIFO queue of int elements
+ * 
+ * A valid queue_s* is either NULL or a value returned by queue_create();
+ * there is no other way to construct one. Caller must not access or assume any
+ * layout for its members - the definition is private to queue.c and may change
+ * without notice.
+ * 
+ * Ownership: the caller that receives a queue_s* from queue_create() owns it and
+ * is responsible for destroying it via the matching destroy function. After destruction,
+ * the pointer is dangling and must not be dereferenced or passed to any queue function.
+ */
+typedef struct queue queue_s; //Do not expose the elements/members of these structures to the user.
 
-/***** Function prototypes/declarations *****/
-
+/************************* Function prototypes/declarations *************************/
+/**
+ * @brief Allocate and initialize a new, empty queue.
+ * 
+ * @return Pointer to the newly allocated queue_s with size 0 and
+ *         no elements, or NULL if allocation fails.
+ * 
+ * @note The caller owns the returned queue and is responsible for
+ *       eventually releassing it via the matching destroy function
+ */
 queue_s *queue_create();
+
+/**
+ * @brief Allocate a new node holding @p data and append it to the tail
+ *        of the queue.
+ * 
+ * @param q    Address of the caller's queue pointer. Must not be NULL, and *q
+ *             must already point to a queue previously returned by queue_create().
+ * @param data Value to store in the new node.
+ * 
+ * @return QUEUE_ERR_INVALID_ARG if @p q or *q is NULL,
+ *         QUEUE_ERR_ALLOC if new node's allocation failed,
+ *         QUEUE_OK on success.
+ */
 int enqueue(queue_s **q, int data);
 
 
