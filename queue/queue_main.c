@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define CHECK_FATAL(x) do {                                          \
+    queue_status status = (x);                                       \
+    if(status != QUEUE_OK) {                                         \
+        fprintf(stderr, "Fatal: %s\n", queue_status_str(status));    \
+        exit(EXIT_FAILURE);                                          \
+    }                                                                \
+} while(0)
+
 int main(void) {
     
     queue_s *q1 = queue_create();
@@ -11,39 +19,53 @@ int main(void) {
     }
 
     printf("\n");
-    queue_enqueue(&q1, 10);
-    queue_enqueue(&q1, 20);
-    queue_enqueue(&q1, 30);
-    queue_enqueue(&q1, 40);
+    CHECK_FATAL(queue_enqueue(&q1, 10));
+    CHECK_FATAL(queue_enqueue(&q1, 20));
+    CHECK_FATAL(queue_enqueue(&q1, 30));
+    CHECK_FATAL(queue_enqueue(&q1, 40));
     printf("\n");
-    queue_traverse(q1);
+
+    queue_status status = queue_traverse(q1); 
+    if(status != QUEUE_OK) {
+        fprintf(stderr, "%s\n", queue_status_str(status));
+    }
 
     int dequeued_value = 0;
-    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
-        printf("\nDequeued value is: %d\n", dequeued_value);
-    }
-    queue_traverse(q1);
+    CHECK_FATAL(queue_dequeue(&q1, &dequeued_value));
+    printf("\nDequeued value is: %d\n", dequeued_value);
 
-    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
-        printf("\nDequeued value is: %d\n", dequeued_value);
-    }
-    queue_traverse(q1);
-
-    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
-        printf("\nDequeued value is: %d\n", dequeued_value);
-    }
-    queue_traverse(q1);
-
-    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
-        printf("\nDequeued value is: %d\n", dequeued_value);
-    }
-    queue_traverse(q1);
-
-    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
-        printf("\nDequeued value is: %d\n", dequeued_value);
+    status = queue_traverse(q1); 
+    if(status != QUEUE_OK) {
+        fprintf(stderr, "%s\n", queue_status_str(status));
     }
 
+    CHECK_FATAL(queue_dequeue(&q1, &dequeued_value));
+    printf("\nDequeued value is: %d\n", dequeued_value);
 
+    status = queue_traverse(q1); 
+    if(status != QUEUE_OK) {
+        fprintf(stderr, "%s\n", queue_status_str(status));
+    }
+
+    CHECK_FATAL(queue_dequeue(&q1, &dequeued_value));
+    printf("\nDequeued value is: %d\n", dequeued_value);
+
+    status = queue_traverse(q1); 
+    if(status != QUEUE_OK) {
+        fprintf(stderr, "%s\n", queue_status_str(status));
+    }
+
+    CHECK_FATAL(queue_dequeue(&q1, &dequeued_value));
+    printf("\nDequeued value is: %d\n", dequeued_value);
+
+    status = queue_traverse(q1); 
+    if(status != QUEUE_OK) {
+        fprintf(stderr, "%s\n", queue_status_str(status));
+    }
+
+    CHECK_FATAL(queue_dequeue(&q1, &dequeued_value));
+    printf("\nDequeued value is: %d\n", dequeued_value);
+    
     free(q1);
     q1=NULL;    
     

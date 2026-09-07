@@ -90,4 +90,6 @@ queue_status queue_dequeue(queue_s **q, int *out_data);
  */
 int queue_traverse(const queue_s *q);
 
+char *queue_status_str(queue_status status);
+
 #endif // end of header file

@@ -39,9 +39,7 @@ static bool is_queue_empty(const queue_s* q) {
 
 queue_s *queue_create() {
     queue_s *q = calloc(1, sizeof(*q));
-    if(!q) {
-        return NULL;
-    }
+
     printf("Queue creation // ");
     print_queue_details(q);
 
@@ -75,10 +73,10 @@ queue_status queue_enqueue(queue_s **q, int data) {
         // Update tail pointer
         (*q)->tail = n;
     }      
-    (*q)->size++;
-
-    print_queue_details(*q);
+    
     print_nodes(n, (*q)->size, n->data, msg);
+    (*q)->size++;
+    print_queue_details(*q);
     // printf("%s %u: at address %p with data = %d\n", msg, (*q)->size, n, n->data);
         
     return QUEUE_OK;
@@ -125,4 +123,14 @@ queue_status queue_traverse(const queue_s *q) {
     }
 
     return QUEUE_OK;
+}
+
+char *queue_status_str(queue_status status) {
+    switch (status) {
+        case QUEUE_OK: return "QUEUE_OK";
+        case QUEUE_ERR_ALLOC: return "Memory allocation failed!";
+        case QUEUE_ERR_INVALID_ARG: return "NULL: Invalid argument provided!";
+        case QUEUE_EMPTY: return "Container queue is empty!";
+        default: return "Unknown error!";
+    }
 }
