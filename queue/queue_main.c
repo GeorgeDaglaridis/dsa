@@ -18,6 +18,32 @@ int main(void) {
     printf("\n");
     queue_traverse(q1);
 
+    int dequeued_value = 0;
+    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
+        printf("\nDequeued value is: %d\n", dequeued_value);
+    }
+    queue_traverse(q1);
+
+    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
+        printf("\nDequeued value is: %d\n", dequeued_value);
+    }
+    queue_traverse(q1);
+
+    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
+        printf("\nDequeued value is: %d\n", dequeued_value);
+    }
+    queue_traverse(q1);
+
+    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
+        printf("\nDequeued value is: %d\n", dequeued_value);
+    }
+    queue_traverse(q1);
+
+    if(queue_dequeue(&q1, &dequeued_value) == QUEUE_OK) {
+        printf("\nDequeued value is: %d\n", dequeued_value);
+    }
+
+
     free(q1);
     q1=NULL;    
     

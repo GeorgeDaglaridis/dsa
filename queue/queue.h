@@ -1,6 +1,8 @@
 #ifndef __H_QUEUE__
 #define __H_QUEUE__
 
+#include <stdbool.h>
+
 #define DEBUG 1
 
 #if DEBUG
@@ -13,6 +15,8 @@ typedef enum {
     QUEUE_OK = 0,
     QUEUE_ERR_ALLOC = -1,
     QUEUE_ERR_INVALID_ARG = -2,
+    QUEUE_EMPTY = -3
+
 } queue_status;
 
 /**
@@ -53,7 +57,24 @@ queue_s *queue_create();
  *         QUEUE_ERR_ALLOC if new node's allocation failed,
  *         QUEUE_OK on success.
  */
-int queue_enqueue(queue_s **q, int data);
+queue_status queue_enqueue(queue_s **q, int data);
+
+/**
+ * @brief Remove the queue's front element and hand its value back to the caller.
+ * 
+ * Detaches the node currently at @p q's head, copies its data out throught @p out_data,
+ * then frees the node's storage.
+ *  
+ * @param[in, out] q    Address of the caller's queue pointer. Must not be NULL and *q
+ *                      must already point to a queue previously returned by queue_create().
+ * @param[out] out_data Must not be NULL. On QUEUE_OK, receives the data held by the dequeued node.
+ *                      Left unmodified if this function returns anything else
+ * 
+ * @return QUEUE_ERR_INVALID_ARG if @p q, *q or @p out_data is NULL,
+ *         QUEUE_EMPTY if the queue is empty,
+ *         QUEUE_OK on success.
+ */
+queue_status queue_dequeue(queue_s **q, int *out_data);
 
 /**
  * @brief Print the queue's internal details, then each node's data in 
@@ -68,6 +89,5 @@ int queue_enqueue(queue_s **q, int data);
  * @note Read-only: does not modity @p q or any node it points to.
  */
 int queue_traverse(const queue_s *q);
-
 
 #endif // end of header file

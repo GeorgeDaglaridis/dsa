@@ -1,6 +1,7 @@
 #include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * @brief Handle to a single queue node (internal to queue_s).
@@ -29,6 +30,13 @@ static void print_nodes(const node_s *n, const size_t node_index, const int node
     printf("%s[%ld] = %d at address %p\n", msg, node_index, node_data, n);  
 }
 
+static bool is_queue_empty(const queue_s* q) {
+    if((q->head == NULL) && (q->tail == NULL)) {
+        return true;
+    }
+    return false;
+}
+
 queue_s *queue_create() {
     queue_s *q = calloc(1, sizeof(*q));
     if(!q) {
@@ -37,10 +45,12 @@ queue_s *queue_create() {
     printf("Queue creation // ");
     print_queue_details(q);
 
+    //is_queue_empty(q) ? printf("Queue is empty!\n") : printf("Queue is not empty!\n");
+
     return q;
 }
 
-int queue_enqueue(queue_s **q, int data) {
+queue_status queue_enqueue(queue_s **q, int data) {
     // Wrong argument or Queue never created
     if((q == NULL)  || (*q == NULL)) {
       return QUEUE_ERR_INVALID_ARG;  
@@ -74,7 +84,36 @@ int queue_enqueue(queue_s **q, int data) {
     return QUEUE_OK;
 }
 
-int queue_traverse(const queue_s *q) {
+queue_status queue_dequeue(queue_s **q, int *out_data) {
+
+    if((q == NULL)  || (*q == NULL) || (out_data == NULL)) {
+      return QUEUE_ERR_INVALID_ARG;  
+    }
+    if(is_queue_empty(*q)) {
+        return QUEUE_EMPTY;
+    }
+
+    node_s *current = (*q)->head;
+    (*q)->head = current->next_node;
+
+    // In case both head and tail point to the last
+    // node, both of them will be pointing to NULL
+    // after this last node is removed!
+    if(current == (*q)->tail) {
+        (*q)->tail = current->next_node; // NULL
+    }
+    // Store the dequeued value.
+    *out_data = current->data;
+    
+    (*q)->size--;
+
+    free(current);
+    //current = NULL; redundand since current is local var and goes out of scope on return
+
+    return QUEUE_OK;
+}
+
+queue_status queue_traverse(const queue_s *q) {
     if(q == NULL){
         return QUEUE_ERR_INVALID_ARG;
     }
