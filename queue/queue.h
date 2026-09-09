@@ -62,13 +62,13 @@ queue_status queue_enqueue(queue_s **q, int data);
 /**
  * @brief Remove the queue's front element and hand its value back to the caller.
  * 
- * Detaches the node currently at @p q's head, copies its data out throught @p out_data,
+ * Detaches the node currently at @p q's head, copies its data out through @p out_data,
  * then frees the node's storage.
  *  
- * @param[in, out] q    Address of the caller's queue pointer. Must not be NULL and *q
+ * @param[in,out] q    Address of the caller's queue pointer. Must not be NULL and *q
  *                      must already point to a queue previously returned by queue_create().
  * @param[out] out_data Must not be NULL. On QUEUE_OK, receives the data held by the dequeued node.
- *                      Left unmodified if this function returns anything else
+ *                      Left unmodified if this function returns anything else.
  * 
  * @return QUEUE_ERR_INVALID_ARG if @p q, *q or @p out_data is NULL,
  *         QUEUE_EMPTY if the queue is empty,
