@@ -37,15 +37,21 @@ static bool is_queue_empty(const queue_s* q) {
     return false;
 }
 
-queue_s *queue_create() {
-    queue_s *q = calloc(1, sizeof(*q));
+queue_status queue_create(queue_s **q) {
+    if(q == NULL) {
+        return QUEUE_ERR_INVALID_ARG;
+    }
 
+    *q = calloc(1, sizeof(**q));
+    if(!*q) {
+        return QUEUE_ERR_ALLOC;
+    }
     printf("Queue creation // ");
-    print_queue_details(q);
+    print_queue_details(*q);
 
     //is_queue_empty(q) ? printf("Queue is empty!\n") : printf("Queue is not empty!\n");
 
-    return q;
+    return QUEUE_OK;
 }
 
 queue_status queue_enqueue(queue_s **q, int data) {
@@ -125,7 +131,7 @@ queue_status queue_traverse(const queue_s *q) {
     return QUEUE_OK;
 }
 
-char *queue_status_str(queue_status status) {
+const char *queue_status_str(queue_status status) {
     switch (status) {
         case QUEUE_OK: return "QUEUE_OK";
         case QUEUE_ERR_ALLOC: return "Memory allocation failed!";

@@ -15,8 +15,7 @@ typedef enum {
     QUEUE_OK = 0,
     QUEUE_ERR_ALLOC = -1,
     QUEUE_ERR_INVALID_ARG = -2,
-    QUEUE_EMPTY = -3
-
+    QUEUE_EMPTY = -3,
 } queue_status;
 
 /**
@@ -37,13 +36,17 @@ typedef struct queue queue_s; //Do not expose the elements/members of these stru
 /**
  * @brief Allocate and initialize a new, empty queue.
  * 
- * @return Pointer to the newly allocated queue_s with size 0 and
- *         no elements, or NULL if allocation fails.
+ * @param[in,out] q Address of the caller's queue pointer. Must not be NULL and 
+ *                  on QUEUE_OK, *q is set to a newlly allocated queue.
+ * 
+ * @return QUEUE_ERR_INVALID_ARG if @p q is NULL,
+ *         QUEUE_ERR_ALLOC if new queue's allocation failed,
+ *         QUEUE_OK on success.
  * 
  * @note The caller owns the returned queue and is responsible for
  *       eventually releassing it via the matching destroy function
  */
-queue_s *queue_create();
+queue_status queue_create(queue_s **q);
 
 /**
  * @brief Allocate a new node holding @p data and append it to the tail
@@ -65,7 +68,7 @@ queue_status queue_enqueue(queue_s **q, int data);
  * Detaches the node currently at @p q's head, copies its data out through @p out_data,
  * then frees the node's storage.
  *  
- * @param[in,out] q    Address of the caller's queue pointer. Must not be NULL and *q
+ * @param[in,out] q     Address of the caller's queue pointer. Must not be NULL and *q
  *                      must already point to a queue previously returned by queue_create().
  * @param[out] out_data Must not be NULL. On QUEUE_OK, receives the data held by the dequeued node.
  *                      Left unmodified if this function returns anything else.
@@ -90,6 +93,6 @@ queue_status queue_dequeue(queue_s **q, int *out_data);
  */
 int queue_traverse(const queue_s *q);
 
-char *queue_status_str(queue_status status);
+const char *queue_status_str(queue_status status);
 
 #endif // end of header file

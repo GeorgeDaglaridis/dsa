@@ -12,9 +12,10 @@
 
 int main(void) {
     
-    queue_s *q1 = queue_create();
-    if(!q1) {
-        fprintf(stderr, "Queue memory allocation failed!\n");
+    queue_s *q1 = NULL;
+    queue_status status = queue_create(&q1);
+    if(status != QUEUE_OK) {
+        fprintf(stderr, "Queue creation: %s\n", queue_status_str(status));
         return EXIT_FAILURE;
     }
 
@@ -25,7 +26,7 @@ int main(void) {
     CHECK_FATAL(queue_enqueue(&q1, 40));
     printf("\n");
 
-    queue_status status = queue_traverse(q1); 
+    status = queue_traverse(q1); 
     if(status != QUEUE_OK) {
         fprintf(stderr, "%s\n", queue_status_str(status));
     }
