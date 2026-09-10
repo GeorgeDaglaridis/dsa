@@ -91,7 +91,7 @@ queue_status queue_dequeue(queue_s **q, int *out_data);
  * 
  * @note Read-only: does not modity @p q or any node it points to.
  */
-int queue_traverse(const queue_s *q);
+queue_status queue_traverse(const queue_s *q);
 
 const char *queue_status_str(queue_status status);
 
