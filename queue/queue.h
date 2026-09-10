@@ -93,6 +93,19 @@ queue_status queue_dequeue(queue_s **q, int *out_data);
  */
 queue_status queue_traverse(const queue_s *q);
 
+/**
+ * @brief Translate a queue_status value into a human-readable string.
+ *
+ * @param status Status value to describe, typically one returned by
+ *               another queue_* function.
+ *
+ * @return A NUL-terminated string describing @p status, or "Unknown error!"
+ *         if @p status does not match any known queue_status value.
+ *
+ * @note The returned pointer refers to a string literal: it must not be
+ *       freed or written through, and it remains valid for the lifetime
+ *       of the program.
+ */
 const char *queue_status_str(queue_status status);
 
 #endif // end of header file
