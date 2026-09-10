@@ -131,6 +131,18 @@ queue_status queue_traverse(const queue_s *q) {
     return QUEUE_OK;
 }
 
+queue_status queue_front(const queue_s *q, int *out_data) {
+    if( (q == NULL) || (out_data == NULL) ) {
+        return QUEUE_ERR_INVALID_ARG;
+    }
+    if(is_queue_empty(q)) {
+        return QUEUE_EMPTY;
+    }
+    *out_data = q->head->data;
+
+    return QUEUE_OK;
+}
+
 size_t gueue_size(queue_s *q) {
     return q->size;
 }

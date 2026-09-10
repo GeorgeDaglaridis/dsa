@@ -94,6 +94,21 @@ queue_status queue_dequeue(queue_s **q, int *out_data);
 queue_status queue_traverse(const queue_s *q);
 
 /**
+ * @brief Hands back to the caller the queue's front element without removing it.
+ *
+ * @param[in] q Caller's queue pointer variable. Must not be NULL.
+ * @param[out] out_data Must not be NULL. On QUEUE_OK, receives the data held the queue's front node.
+ *                      Left unmodified if this function returns anything else.
+ *
+ * @return QUEUE_ERR_INVALID_ARG if @p q or @p out_data is NULL,
+ *         QUEUE_EMPTY if the queue is empty,
+ *         QUEUE_OK on success.
+ *
+ * @note Read-only: does not modity @p q or any node it points to.
+ */
+queue_status queue_front(const queue_s *q, int *out_data);
+
+/**
  * @brief Translate a queue_status value into a human-readable string.
  *
  * @param status Status value to describe, typically one returned by
