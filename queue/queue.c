@@ -131,6 +131,10 @@ queue_status queue_traverse(const queue_s *q) {
     return QUEUE_OK;
 }
 
+size_t gueue_size(queue_s *q) {
+    return q->size;
+}
+
 const char *queue_status_str(queue_status status) {
     switch (status) {
         case QUEUE_OK: return "QUEUE_OK";
