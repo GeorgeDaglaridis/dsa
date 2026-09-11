@@ -24,11 +24,11 @@ struct queue {
 
 // Helper functions
 static void print_queue_details(const queue_s *q) {
-    DEBUG_PRINT("Queue details:: address: %p, q->head: %p, q->tail: %p, q->size: %u \n", q, q->head, q->tail, q->size);
+    printf("Queue details:: address: %p, q->head: %p, q->tail: %p, q->size: %u \n", q, q->head, q->tail, q->size);
 }
 
 static void print_nodes(const node_s *n, const size_t node_index, const int node_data, const char *msg) {
-    printf("%s[%ld] = %d at address %p\n", msg, node_index, node_data, n);  
+    DEBUG_PRINT("%s[%ld] = %d at address %p\n", msg, node_index, node_data, n);
 }
 
 static bool is_queue_empty(const queue_s* q) {
