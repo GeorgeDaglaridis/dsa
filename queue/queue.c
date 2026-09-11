@@ -143,8 +143,13 @@ queue_status queue_front(const queue_s *q, int *out_data) {
     return QUEUE_OK;
 }
 
-size_t gueue_size(queue_s *q) {
-    return q->size;
+queue_status queue_size(const queue_s *q, size_t *out_size) {
+    if( (q == NULL) || (out_size == NULL) ) {
+        return QUEUE_ERR_INVALID_ARG;
+    }
+    *out_size = q->size;
+
+    return QUEUE_OK;
 }
 
 const char *queue_status_str(queue_status status) {

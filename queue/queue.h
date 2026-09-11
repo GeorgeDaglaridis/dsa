@@ -109,6 +109,20 @@ queue_status queue_traverse(const queue_s *q);
 queue_status queue_front(const queue_s *q, int *out_data);
 
 /**
+ * @brief Hands back to the caller the size of the queue.
+ *
+ * @param[in] q Caller's queue pointer variable. Must not be NULL.
+ * @param[out] out_size Must not be NULL. On QUEUE_OK, receives the current size of the queue.
+ *                      Left unmodified if this function returns anything else.
+ *
+ * @return QUEUE_ERR_INVALID_ARG if @p q is NULL,
+ *         QUEUE_OK on success.
+ *
+ * @note Read-only: does not modity @p q or any node it points to.
+ */
+queue_status queue_size(const queue_s *q, size_t *out_size);
+
+/**
  * @brief Translate a queue_status value into a human-readable string.
  *
  * @param status Status value to describe, typically one returned by
