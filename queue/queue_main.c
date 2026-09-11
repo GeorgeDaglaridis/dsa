@@ -94,9 +94,12 @@ int main(void) {
     //     exit(EXIT_FAILURE);
     // }
     
-    
-    free(q1);
-    q1=NULL;    
+    // Given the particular test run (function calls) above, keep in mind that
+    // when flow reaches this point all nodes have already been dequeued
+    // and function queue_destroy has only to deallocate the queue container.
+    DEBUG_PRINT("Before freeing: address queue points to: %p\n", q1);
+    CHECK_FATAL(queue_destroy(&q1));
+    DEBUG_PRINT("After freeing: address queue points to: %p\n", q1);
     
     return EXIT_SUCCESS;
 }

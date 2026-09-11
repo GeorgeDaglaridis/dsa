@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 /**
  * @brief Handle to a single queue node (internal to queue_s).
@@ -50,6 +51,29 @@ queue_status queue_create(queue_s **q) {
     print_queue_details(*q);
 
     //is_queue_empty(q) ? printf("Queue is empty!\n") : printf("Queue is not empty!\n");
+
+    return QUEUE_OK;
+}
+
+queue_status queue_destroy(queue_s **q) {
+    // Wrong argument or Queue never created
+    if((q == NULL)  || (*q == NULL)) {
+      return QUEUE_ERR_INVALID_ARG;  
+    }
+
+    // Free each node first: memory deallocation
+    node_s *cursor = (*q)->head;
+    while(cursor != NULL) {
+        node_s *temp_next_node = cursor->next_node;
+
+        DEBUG_PRINT("Before freeing: address node cursor points to: %p\n", cursor);
+        free(cursor); 
+        cursor = temp_next_node;
+    }
+
+    // Queue container memory deallocation
+    free(*q);
+    *q = NULL;
 
     return QUEUE_OK;
 }

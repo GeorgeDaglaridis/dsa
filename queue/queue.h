@@ -2,6 +2,7 @@
 #define __H_QUEUE__
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #define DEBUG 1
 
@@ -47,6 +48,20 @@ typedef struct queue queue_s; //Do not expose the elements/members of these stru
  *       eventually releassing it via the matching destroy function
  */
 queue_status queue_create(queue_s **q);
+
+/**
+ * @brief Free a queue and all of its remaining nodes.
+ *
+ * @param[in,out] q Address of the caller's queue pointer. Must not be NULL, and *q
+ *                  must already point to a queue previously returned by queue_create().
+ *
+ * @return QUEUE_ERR_INVALID_ARG if @p q or *q is NULL,
+ *         QUEUE_OK on success.
+ *
+ * @note On QUEUE_OK, *q is freed and is set to NULL rather than left dangling. Because of this,
+ *       calling queue_destroy() again on the same q is safe and simply returns QUEUE_ERR_INVALID_ARG.
+ */
+queue_status queue_destroy(queue_s **q);
 
 /**
  * @brief Allocate a new node holding @p data and append it to the tail
